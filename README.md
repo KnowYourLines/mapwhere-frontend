@@ -1,4 +1,4 @@
-# channels-frontend
+# mapwhere-frontend
 
 ## Project setup
 ```
