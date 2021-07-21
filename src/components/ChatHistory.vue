@@ -17,7 +17,8 @@
         ><span v-if="notification.join_request__user__display_name">
           {{ notification.join_request__user__display_name }} requested to
           join</span
-        >
+        ><span v-if="notification.now_public">Room is now public</span
+        ><span v-if="notification.now_private">Room is now private</span>
         <br />{{ notification.timestamp }}
         <br />
         <button
@@ -43,6 +44,8 @@
         ><span v-if="notification.join_request__user__display_name">
           {{ notification.join_request__user__display_name }} requested to
           join</span
+        ><span v-if="notification.now_public">Room is now public</span
+        ><span v-if="notification.now_private">Room is now private</span
         ><br />{{ notification.timestamp }}
         <br />
         <button
