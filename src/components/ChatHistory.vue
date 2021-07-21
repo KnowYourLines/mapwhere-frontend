@@ -14,6 +14,9 @@
           {{ notification.user_joined__display_name }} has joined the chat</span
         ><span v-if="notification.user_left__display_name">
           {{ notification.user_left__display_name }} has left the chat</span
+        ><span v-if="notification.join_request__user__display_name">
+          {{ notification.join_request__user__display_name }} requested to
+          join</span
         >
         <br />{{ notification.timestamp }}
         <br />
@@ -37,6 +40,9 @@
           {{ notification.user_joined__display_name }} has joined the chat</span
         ><span v-if="notification.user_left__display_name">
           {{ notification.user_left__display_name }} has left the chat</span
+        ><span v-if="notification.join_request__user__display_name">
+          {{ notification.join_request__user__display_name }} requested to
+          join</span
         ><br />{{ notification.timestamp }}
         <br />
         <button
