@@ -7,7 +7,7 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC0oQAyJN_42wFRvpVxpsu1MbH3-f-y5cY&libraries=places"
+      src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.VUE_APP_FIREBASE_API_KEY %>&libraries=places"
     ></script>
   </head>
   <body>
