@@ -35,6 +35,8 @@
         value="Send"
         @click="submit"
       />
+      <br/>
+      <input ref="searchbox" class="controls" type="text" placeholder="Search Box" />
     </div>
     <div class="column-right">
       <ChatMembers
@@ -130,6 +132,16 @@ export default {
   },
   mounted() {
     this.$refs.input.focus();
+    const google = window.google;
+    const searchBox = new google.maps.places.SearchBox(this.$refs.searchbox);
+    searchBox.addListener("places_changed", () => {
+      const places = searchBox.getPlaces();
+
+      if (places.length == 0) {
+        return;
+      }
+      console.log(places);
+    });
   },
 };
 </script>
