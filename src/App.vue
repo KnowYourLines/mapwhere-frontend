@@ -70,7 +70,9 @@ export default {
           privacy: this.privateRoom,
         })
       );
-      this.$refs.chat.$refs.input.focus();
+      if (this.$refs.chat.$refs.component.$refs.input) {
+        this.$refs.chat.$refs.component.$refs.input.focus();
+      }
     },
     socketCreated: function (socket) {
       this.socket = socket;
@@ -100,11 +102,13 @@ export default {
       this.privateRoom = privacy;
     },
     newMessage: function (message) {
-      this.$refs.chat.$refs.log.value += message;
+      if (this.$refs.chat.$refs.component.$refs.log) {
+        this.$refs.chat.$refs.component.$refs.log.value += message;
+      }
     },
     clearChat: function () {
-      if (this.$refs.chat.$refs.log) {
-        this.$refs.chat.$refs.log.value = "";
+      if (this.$refs.chat.$refs.component.$refs.log) {
+        this.$refs.chat.$refs.component.$refs.log.value = "";
       }
     },
   },
