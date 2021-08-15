@@ -36,6 +36,7 @@ export default {
     "new-username",
     "new-message",
     "new-privacy",
+    "fetching-message",
   ],
   data() {
     return {
