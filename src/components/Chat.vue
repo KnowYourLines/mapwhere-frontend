@@ -21,7 +21,7 @@
         @keyup.enter="updateDisplayName"
       />
       <br /><br />
-      <button @click="chatSelected">Chat</button>
+      <button ref="tab1" @click="chatSelected">Chat</button>
       <button @click="findSelected">Find</button>
       <button @click="currentTabComponent = 'Tab3'">tab 3</button>
       <component
@@ -105,8 +105,11 @@ export default {
   },
   methods: {
     chatSelected: function () {
-      this.socketRef.send(JSON.stringify({ command: "fetch_messages" }));
-      this.currentTabComponent = "Tab1";
+      if (this.currentTabComponent != "Tab1") {
+        this.socketRef.send(JSON.stringify({ command: "fetch_messages" }));
+        this.currentTabComponent = "Tab1";
+        this.$refs.tab1.style.backgroundColor = null;
+      }
     },
     findSelected: function () {
       this.currentTabComponent = "Tab2";

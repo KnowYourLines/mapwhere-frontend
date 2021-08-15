@@ -10,8 +10,10 @@
     @clear-chat="clearChat"
     @new-username="newUsername"
     @new-message="newMessage"
+    @fetching-message="fetchingMessage"
     @new-privacy="newPrivacy"
   />
+  <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
     <template v-slot:label="{ checked, classList }">
       <span :class="classList.label">{{ checked ? "Private" : "Public" }}</span>
@@ -102,6 +104,13 @@ export default {
       this.privateRoom = privacy;
     },
     newMessage: function (message) {
+      if (this.$refs.chat.$refs.component.$refs.log) {
+        this.$refs.chat.$refs.component.$refs.log.value += message;
+      } else {
+        this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
+      }
+    },
+    fetchingMessage: function (message) {
       if (this.$refs.chat.$refs.component.$refs.log) {
         this.$refs.chat.$refs.component.$refs.log.value += message;
       }
