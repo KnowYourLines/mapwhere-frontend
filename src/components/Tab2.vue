@@ -5,8 +5,13 @@
       class="controls"
       type="text"
       :value="yourLocation"
-      placeholder="Your location"
+      placeholder="Enter location"
       @focus="$event.target.select()"
+    /><br /><br /><img
+      src="@/assets/icons8-location-off-50.png"
+      @click="getCurrentLocation"
+      class="tab-button"
+      width="25"
     />
     <div v-if="noLocationFound"><br />No location found.</div>
     <div v-if="possiblePlaces">
@@ -43,11 +48,34 @@ export default {
       this.yourLocation = place.name + ", " + place.formatted_address;
       this.possiblePlaces = null;
     },
+    getCurrentLocation: function () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const geocoder = new this.google.maps.Geocoder();
+          const latlng = {
+            lat: parseFloat(position.coords.latitude),
+            lng: parseFloat(position.coords.longitude),
+          };
+          geocoder.geocode({ location: latlng }).then((response) => {
+            console.log(response);
+            if (response.results.length > 0) {
+              const foundLocation = response.results[0];
+              this.yourLocation = foundLocation.formatted_address;
+              this.lat = foundLocation.geometry.location.lat();
+              this.lng = foundLocation.geometry.location.lng();
+              this.possiblePlaces = null;
+            }
+          });
+        });
+      } else {
+        alert("Your browser doesn't support geolocation.");
+      }
+    },
   },
   mounted() {
     this.$refs.input.focus();
-    const google = window.google;
-    const searchBox = new google.maps.places.SearchBox(this.$refs.input);
+    this.google = window.google;
+    const searchBox = new this.google.maps.places.SearchBox(this.$refs.input);
     searchBox.addListener("places_changed", () => {
       const places = searchBox.getPlaces();
 

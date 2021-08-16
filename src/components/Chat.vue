@@ -43,6 +43,13 @@
         v-bind:class="{ active: currentTabComponent === 'Tab3' }"
         @click="currentTabComponent = 'Tab3'"
       >
+        Area
+      </button>
+      <button
+        class="tab-button"
+        v-bind:class="{ active: currentTabComponent === 'Tab4' }"
+        @click="currentTabComponent = 'Tab4'"
+      >
         Vote
       </button>
       <component
@@ -72,6 +79,7 @@ import ChatMembers from "./ChatMembers.vue";
 import Tab1 from "./Tab1.vue";
 import Tab2 from "./Tab2.vue";
 import Tab3 from "./Tab3.vue";
+import Tab4 from "./Tab4.vue";
 export default {
   name: "Chat",
   components: {
@@ -80,6 +88,7 @@ export default {
     Tab1,
     Tab2,
     Tab3,
+    Tab4,
   },
   data() {
     return {
