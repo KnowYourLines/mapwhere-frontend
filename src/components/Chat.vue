@@ -11,6 +11,7 @@
         :value="roomName"
         @input="$emit('update:roomName', $event.target.value)"
         @keyup.enter="updateRoomName"
+        @focus="$event.target.select()"
       /><br />
       Speaking as:
       <input
@@ -19,6 +20,7 @@
         :value="username"
         @input="$emit('update:username', $event.target.value)"
         @keyup.enter="updateDisplayName"
+        @focus="$event.target.select()"
       />
       <br /><br />
       <button
