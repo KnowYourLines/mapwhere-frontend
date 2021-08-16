@@ -10,8 +10,10 @@
     @clear-chat="clearChat"
     @new-username="newUsername"
     @new-message="newMessage"
+    @fetching-message="fetchingMessage"
     @new-privacy="newPrivacy"
   />
+  <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
     <template v-slot:label="{ checked, classList }">
       <span :class="classList.label">{{ checked ? "Private" : "Public" }}</span>
@@ -70,7 +72,9 @@ export default {
           privacy: this.privateRoom,
         })
       );
-      this.$refs.chat.$refs.input.focus();
+      if (this.$refs.chat.$refs.component.$refs.input) {
+        this.$refs.chat.$refs.component.$refs.input.focus();
+      }
     },
     socketCreated: function (socket) {
       this.socket = socket;
@@ -100,11 +104,20 @@ export default {
       this.privateRoom = privacy;
     },
     newMessage: function (message) {
-      this.$refs.chat.$refs.log.value += message;
+      if (this.$refs.chat.$refs.component.$refs.log) {
+        this.$refs.chat.$refs.component.$refs.log.value += message;
+      } else {
+        this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
+      }
+    },
+    fetchingMessage: function (message) {
+      if (this.$refs.chat.$refs.component.$refs.log) {
+        this.$refs.chat.$refs.component.$refs.log.value += message;
+      }
     },
     clearChat: function () {
-      if (this.$refs.chat.$refs.log) {
-        this.$refs.chat.$refs.log.value = "";
+      if (this.$refs.chat.$refs.component.$refs.log) {
+        this.$refs.chat.$refs.component.$refs.log.value = "";
       }
     },
   },

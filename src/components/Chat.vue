@@ -20,21 +20,16 @@
         @input="$emit('update:username', $event.target.value)"
         @keyup.enter="updateDisplayName"
       />
-      <textarea
-        class="textarea"
-        id="chat"
-        ref="log"
-        cols="100"
-        rows="20"
-        readonly
-      ></textarea
-      ><br />
-      <input id="message" ref="input" type="text" @keyup.enter="submit" /><input
-        ref="submit"
-        type="button"
-        value="Send"
-        @click="submit"
-      />
+      <br /><br />
+      <button ref="tab1" @click="chatSelected">Chat</button>
+      <button @click="findSelected">Find</button>
+      <button @click="currentTabComponent = 'Tab3'">tab 3</button>
+      <component
+        ref="component"
+        :is="currentTabComponent"
+        :socketRef="socketRef"
+        :username="username"
+      ></component>
     </div>
     <div class="column-right">
       <ChatMembers
@@ -53,11 +48,22 @@
 <script>
 import ChatHistory from "./ChatHistory.vue";
 import ChatMembers from "./ChatMembers.vue";
+import Tab1 from "./Tab1.vue";
+import Tab2 from "./Tab2.vue";
+import Tab3 from "./Tab3.vue";
 export default {
   name: "Chat",
   components: {
     ChatHistory,
     ChatMembers,
+    Tab1,
+    Tab2,
+    Tab3,
+  },
+  data() {
+    return {
+      currentTabComponent: "Tab1",
+    };
   },
   props: {
     socketRef: {
@@ -98,6 +104,16 @@ export default {
     },
   },
   methods: {
+    chatSelected: function () {
+      if (this.currentTabComponent != "Tab1") {
+        this.socketRef.send(JSON.stringify({ command: "fetch_messages" }));
+        this.currentTabComponent = "Tab1";
+        this.$refs.tab1.style.backgroundColor = null;
+      }
+    },
+    findSelected: function () {
+      this.currentTabComponent = "Tab2";
+    },
     updateDisplayName: function () {
       this.socketRef.send(
         JSON.stringify({
@@ -106,7 +122,9 @@ export default {
         })
       );
       this.socketRef.send(JSON.stringify({ command: "fetch_display_name" }));
-      this.$refs.input.focus();
+      if (this.$refs.component.$refs.input) {
+        this.$refs.component.$refs.input.focus();
+      }
     },
     updateRoomName: function () {
       this.socketRef.send(
@@ -115,21 +133,10 @@ export default {
           name: this.roomName,
         })
       );
-      this.$refs.input.focus();
+      if (this.$refs.component.$refs.input) {
+        this.$refs.component.$refs.input.focus();
+      }
     },
-    submit: function () {
-      const message = this.$refs.input.value;
-      this.socketRef.send(
-        JSON.stringify({
-          message: message,
-          user: this.username,
-        })
-      );
-      this.$refs.input.value = "";
-    },
-  },
-  mounted() {
-    this.$refs.input.focus();
   },
 };
 </script>

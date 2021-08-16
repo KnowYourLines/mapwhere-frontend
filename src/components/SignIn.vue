@@ -36,6 +36,7 @@ export default {
     "new-username",
     "new-message",
     "new-privacy",
+    "fetching-message",
   ],
   data() {
     return {
@@ -255,6 +256,8 @@ export default {
                   })
                 );
               }
+            } else if ("fetching_message" in data) {
+              this.$emit("fetching-message", data.fetching_message + "\n");
             } else {
               this.$emit("new-message", data.message + "\n");
             }
