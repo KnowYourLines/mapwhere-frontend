@@ -21,9 +21,28 @@
         @keyup.enter="updateDisplayName"
       />
       <br /><br />
-      <button ref="tab1" @click="chatSelected">Chat</button>
-      <button @click="findSelected">Find</button>
-      <button @click="currentTabComponent = 'Tab3'">tab 3</button>
+      <button
+        class="tab-button"
+        ref="tab1"
+        v-bind:class="{ active: currentTabComponent === 'Tab1' }"
+        @click="chatSelected"
+      >
+        Chat
+      </button>
+      <button
+        class="tab-button"
+        v-bind:class="{ active: currentTabComponent === 'Tab2' }"
+        @click="findSelected"
+      >
+        Find
+      </button>
+      <button
+        class="tab-button"
+        v-bind:class="{ active: currentTabComponent === 'Tab3' }"
+        @click="currentTabComponent = 'Tab3'"
+      >
+        Vote
+      </button>
       <component
         ref="component"
         :is="currentTabComponent"
@@ -141,13 +160,20 @@ export default {
 };
 </script>
 <style >
-#chat {
-  max-width: 100%;
+.tab-button {
+  padding: 6px 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #f0f0f0;
+  margin-bottom: -1px;
+  margin-right: -1px;
 }
-#message {
-  width: 100%;
+.tab-button:hover {
+  background: #e0e0e0;
 }
-#array-rendering {
-  list-style-type: none;
+.tab-button.active {
+  background: #e0e0e0;
 }
 </style> 
