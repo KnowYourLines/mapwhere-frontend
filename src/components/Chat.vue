@@ -57,6 +57,7 @@
         :is="currentTabComponent"
         :socketRef="socketRef"
         :username="username"
+        @goto-area-tab="currentTabComponent = 'Tab3'"
       ></component>
     </div>
     <div class="column-right">

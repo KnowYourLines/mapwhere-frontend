@@ -11,11 +11,30 @@
       ref="input"
       class="controls"
       type="text"
-      v-model="yourLocation"
+      :value="yourLocation"
       placeholder="Enter start location"
       @focus="$event.target.select()"
     /><br /><br />
-    <div>
+
+    <div v-if="noLocationFound"><br />No location found.</div>
+    <div v-if="possiblePlaces">
+      <ul id="array-rendering">
+        Did you mean:
+        <br /><br />
+        <li>
+          <button type="button" class="btn" @click="allLocationsWrong">
+            None of these</button
+          ><br /><br />
+        </li>
+        <li v-for="place in possiblePlaces" :key="place.place_id">
+          <button type="button" class="btn" @click="selectLocation(place)">
+            {{ place.name }}<br />
+            {{ place.formatted_address }}</button
+          ><br /><br />
+        </li>
+      </ul>
+    </div>
+    <div v-else>
       <img
         src="@/assets/icons8-public-transportation-50.png"
         v-bind:class="{ active: travelMode === 'transit' }"
@@ -45,14 +64,14 @@
       <div id="time-form">
         <input
           type="number"
-          v-model="hoursToTravel"
+          v-model.number.lazy="hoursToTravel"
           min="0"
           @focus="$event.target.select()"
         /><label> hours </label>
         <input
           type="number"
           min="0"
-          v-model="minutesToTravel"
+          v-model.number.lazy="minutesToTravel"
           @focus="$event.target.select()"
         /><label> minutes</label>
       </div>
@@ -61,25 +80,13 @@
         Find reachable area
       </button>
     </div>
-    <div v-if="noLocationFound"><br />No location found.</div>
-    <div v-if="possiblePlaces">
-      <ul id="array-rendering">
-        Did you mean:
-        <br /><br />
-        <li v-for="place in possiblePlaces" :key="place.place_id">
-          <button type="button" class="btn" @click="selectLocation(place)">
-            {{ place.name }}<br />
-            {{ place.formatted_address }}</button
-          ><br /><br />
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Tab2",
+  emits: ["goto-area-tab"],
   data() {
     return {
       lat: null,
@@ -93,7 +100,11 @@ export default {
     };
   },
   methods: {
+    allLocationsWrong: function () {
+      this.possiblePlaces = null;
+    },
     updateIsochrone: function () {
+      this.$emit("goto-area-tab");
       console.log("send something over the websocket");
     },
     selectLocation: function (place) {
