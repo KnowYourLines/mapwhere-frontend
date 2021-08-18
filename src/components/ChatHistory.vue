@@ -1,5 +1,5 @@
 <template>
-  <span>Your chatrooms:</span>
+  <span>Your rooms:</span>
   <ul id="array-rendering">
     <li v-for="notification in notifications" :key="notification.room">
       <div v-if="notification.read" class="read-notification">
