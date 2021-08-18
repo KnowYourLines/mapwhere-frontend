@@ -127,7 +127,7 @@ export default {
         alert("Hours must be a non-negative whole number!");
       } else if (
         parseFloat(this.minutesToTravel) == 0 &&
-        this.parseFloat(this.hoursToTravel) == 0
+        parseFloat(this.hoursToTravel) == 0
       ) {
         alert("Total travel time cannot be zero!");
       } else {
