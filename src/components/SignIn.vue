@@ -258,6 +258,8 @@ export default {
               }
             } else if ("fetching_message" in data) {
               this.$emit("fetching-message", data.fetching_message + "\n");
+            } else if ("refresh_area" in data) {
+              console.log("fetch area");
             } else {
               this.$emit("new-message", data.message + "\n");
             }

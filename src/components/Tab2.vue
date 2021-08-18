@@ -13,6 +13,7 @@
       type="text"
       :value="yourLocation"
       placeholder="Enter start location"
+      @keyup.enter="$refs.input.value = yourLocation"
       @focus="$event.target.select()"
     /><br /><br />
 
@@ -63,12 +64,14 @@
       /><br />
       <div id="time-form">
         <input
+          ref="hours"
           type="number"
           v-model.number.lazy="hoursToTravel"
           min="0"
           @focus="$event.target.select()"
         /><label> hours </label>
         <input
+          ref="minutes"
           type="number"
           min="0"
           v-model.number.lazy="minutesToTravel"
@@ -76,8 +79,8 @@
         /><label> minutes</label>
       </div>
       <br />
-      <button type="button" class="btn" @click="updateIsochrone">
-        Find reachable area
+      <button type="button" class="btn" @click="updateLocationBubble">
+        Find group's reachable area 
       </button>
     </div>
   </div>
@@ -87,6 +90,12 @@
 export default {
   name: "Tab2",
   emits: ["goto-area-tab"],
+  props: {
+    socketRef: {
+      type: WebSocket,
+      required: false,
+    },
+  },
   data() {
     return {
       lat: null,
@@ -103,9 +112,38 @@ export default {
     allLocationsWrong: function () {
       this.possiblePlaces = null;
     },
-    updateIsochrone: function () {
-      this.$emit("goto-area-tab");
-      console.log("send something over the websocket");
+    updateLocationBubble: function () {
+      if (!this.yourLocation) {
+        alert("Enter a starting location!");
+      } else if (
+        parseFloat(this.minutesToTravel) < 0 ||
+        !Number.isInteger(parseFloat(this.minutesToTravel))
+      ) {
+        alert("Minutes must be a non-negative whole number!");
+      } else if (
+        parseFloat(this.hoursToTravel) < 0 ||
+        !Number.isInteger(parseFloat(this.hoursToTravel))
+      ) {
+        alert("Hours must be a non-negative whole number!");
+      } else if (
+        parseFloat(this.minutesToTravel) == 0 &&
+        this.parseFloat(this.hoursToTravel) == 0
+      ) {
+        alert("Total travel time cannot be zero!");
+      } else {
+        this.$emit("goto-area-tab");
+        this.socketRef.send(
+          JSON.stringify({
+            command: "update_location_bubble",
+            address: this.yourLocation,
+            latitude: this.lat,
+            longitude: this.lng,
+            transportation: this.travelMode,
+            hours: this.hoursToTravel,
+            minutes: this.minutesToTravel,
+          })
+        );
+      }
     },
     selectLocation: function (place) {
       this.lat = place.geometry.location.lat();
