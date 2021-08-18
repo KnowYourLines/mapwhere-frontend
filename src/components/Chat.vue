@@ -57,6 +57,7 @@
         :is="currentTabComponent"
         :socketRef="socketRef"
         :username="username"
+        :locationBubble="locationBubble"
         @goto-area-tab="currentTabComponent = 'Tab3'"
       ></component>
     </div>
@@ -131,6 +132,10 @@ export default {
     },
     userAllowed: {
       type: Boolean,
+      required: true,
+    },
+    locationBubble: {
+      type: Object,
       required: true,
     },
   },

@@ -37,6 +37,7 @@ export default {
     "new-message",
     "new-privacy",
     "fetching-message",
+    "found-location-bubble",
   ],
   data() {
     return {
@@ -260,6 +261,10 @@ export default {
               this.$emit("fetching-message", data.fetching_message + "\n");
             } else if ("refresh_area" in data) {
               console.log("fetch area");
+            } else if ("location_bubble" in data) {
+              if (data.location_bubble) {
+                this.$emit("found-location-bubble", data.location_bubble);
+              }
             } else {
               this.$emit("new-message", data.message + "\n");
             }

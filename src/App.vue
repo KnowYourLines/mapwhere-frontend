@@ -12,6 +12,7 @@
     @new-message="newMessage"
     @fetching-message="fetchingMessage"
     @new-privacy="newPrivacy"
+    @found-location-bubble="foundLocationBubble"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -29,6 +30,7 @@
     :notifications="notifications"
     :privateRoom="privateRoom"
     :userAllowed="userAllowed"
+    :locationBubble="locationBubble"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"
@@ -58,6 +60,7 @@ export default {
       roomName: "",
       privateRoom: false,
       userAllowed: true,
+      locationBubble: {},
     };
   },
   methods: {
@@ -109,6 +112,9 @@ export default {
       } else {
         this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
       }
+    },
+    foundLocationBubble: function (locationBubble) {
+      this.locationBubble = locationBubble;
     },
     fetchingMessage: function (message) {
       if (this.$refs.chat.$refs.component.$refs.log) {

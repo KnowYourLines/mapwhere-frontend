@@ -80,7 +80,7 @@
       </div>
       <br />
       <button type="button" class="btn" @click="updateLocationBubble">
-        Find group's reachable area 
+        Update group's area
       </button>
     </div>
   </div>
@@ -94,6 +94,10 @@ export default {
     socketRef: {
       type: WebSocket,
       required: false,
+    },
+    locationBubble: {
+      type: Object,
+      required: true,
     },
   },
   data() {
@@ -177,6 +181,11 @@ export default {
   },
   mounted() {
     this.$refs.input.focus();
+    this.socketRef.send(
+      JSON.stringify({
+        command: "fetch_location_bubble",
+      })
+    );
     this.google = window.google;
     const searchBox = new this.google.maps.places.SearchBox(this.$refs.input);
     searchBox.addListener("places_changed", () => {
@@ -206,6 +215,27 @@ export default {
         console.log(places);
       }
     });
+  },
+  updated() {
+    console.log(this.locationBubble);
+    if (
+      this.locationBubble.address &&
+      this.locationBubble.latitude &&
+      this.locationBubble.longitude &&
+      this.locationBubble.hours + this.locationBubble.minutes > 0 &&
+      !this.yourLocation &&
+      !this.lat &&
+      !this.lng &&
+      !this.hoursToTravel &&
+      !this.minutesToTravel
+    ) {
+      this.yourLocation = this.locationBubble.address;
+      this.lat = this.locationBubble.latitude;
+      this.lng = this.locationBubble.longitude;
+      this.travelMode = this.locationBubble.transportation;
+      this.hoursToTravel = this.locationBubble.hours;
+      this.minutesToTravel = this.locationBubble.minutes;
+    }
   },
 };
 </script>
