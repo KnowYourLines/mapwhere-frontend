@@ -7,9 +7,11 @@
     {{ notification.message__content }}</span
   >
   <span v-if="notification.user_joined__display_name">
-    {{ notification.user_joined__display_name }} has joined the chat</span
+    {{ notification.user_joined__display_name }} joined the chat</span
   ><span v-if="notification.user_left__display_name">
-    {{ notification.user_left__display_name }} has left the chat</span
+    {{ notification.user_left__display_name }} left the chat</span
+  ><span v-if="notification.user_location__display_name">
+    {{ notification.user_location__display_name }} updated their location</span
   ><span v-if="notification.join_request__user__display_name">
     {{ notification.join_request__user__display_name }} requested to join</span
   ><span v-if="notification.now_public">Room is now public</span
