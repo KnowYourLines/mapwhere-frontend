@@ -15,9 +15,10 @@
       placeholder="Enter start location"
       @keyup.enter="$refs.input.value = yourLocation"
       @focus="$event.target.select()"
-    /><br /><br />
-
+    />
     <div v-if="noLocationFound"><br />No location found.</div>
+    <br /><br />
+
     <div v-if="possiblePlaces">
       <ul id="array-rendering">
         Did you mean:
@@ -204,7 +205,13 @@ export default {
 
         this.lng = places[0].geometry.location.lng();
         this.lat = places[0].geometry.location.lat();
-        this.yourLocation = places[0].name + ", " + places[0].formatted_address;
+        if (places[0].formatted_address.includes(places[0].name)) {
+          this.yourLocation = places[0].formatted_address;
+        } else {
+          this.yourLocation =
+            places[0].name + ", " + places[0].formatted_address;
+        }
+
         this.possiblePlaces = null;
         this.noLocationFound = false;
       }
@@ -216,8 +223,7 @@ export default {
       }
     });
   },
-  updated() {
-    console.log(this.locationBubble);
+  beforeUpdate() {
     if (
       this.locationBubble.address &&
       this.locationBubble.latitude &&
