@@ -11,7 +11,7 @@
   ><span v-if="notification.user_left__display_name">
     {{ notification.user_left__display_name }} left the chat</span
   ><span v-if="notification.user_location__display_name">
-    {{ notification.user_location__display_name }} updated their location</span
+    {{ notification.user_location__display_name }} updated reachable area</span
   ><span v-if="notification.join_request__user__display_name">
     {{ notification.join_request__user__display_name }} requested to join</span
   ><span v-if="notification.now_public">Room is now public</span

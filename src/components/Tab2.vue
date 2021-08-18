@@ -81,7 +81,7 @@
       </div>
       <br />
       <button type="button" class="btn" @click="updateLocationBubble">
-        Update group's area
+        Update reachable area
       </button>
     </div>
   </div>
