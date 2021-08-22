@@ -58,7 +58,6 @@
         :socketRef="socketRef"
         :username="username"
         :locationBubble="locationBubble"
-        @goto-area-tab="currentTabComponent = 'Tab3'"
       ></component>
     </div>
     <div class="column-right">

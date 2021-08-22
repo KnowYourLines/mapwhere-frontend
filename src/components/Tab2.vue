@@ -90,7 +90,6 @@
 <script>
 export default {
   name: "Tab2",
-  emits: ["goto-area-tab"],
   props: {
     socketRef: {
       type: WebSocket,
@@ -136,7 +135,6 @@ export default {
       ) {
         alert("Total travel time cannot be zero!");
       } else {
-        this.$emit("goto-area-tab");
         this.socketRef.send(
           JSON.stringify({
             command: "update_location_bubble",
