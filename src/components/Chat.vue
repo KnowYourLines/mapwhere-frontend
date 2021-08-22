@@ -147,6 +147,7 @@ export default {
       }
     },
     findSelected: function () {
+      this.socketRef.send(JSON.stringify({ command: "fetch_location_bubble" }));
       this.currentTabComponent = "Tab2";
     },
     updateDisplayName: function () {
