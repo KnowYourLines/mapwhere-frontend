@@ -137,6 +137,11 @@ export default {
             this.socketRef.send(
               JSON.stringify({ command: "fetch_user_notifications" })
             );
+            this.socketRef.send(
+              JSON.stringify({
+                command: "fetch_location_bubble",
+              })
+            );
           };
           this.socketRef.onmessage = (e) => {
             const data = JSON.parse(e.data);

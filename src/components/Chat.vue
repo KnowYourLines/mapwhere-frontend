@@ -93,7 +93,7 @@ export default {
   },
   data() {
     return {
-      currentTabComponent: "Tab1",
+      currentTabComponent: "Tab2",
     };
   },
   props: {

@@ -180,11 +180,6 @@ export default {
   },
   mounted() {
     this.$refs.input.focus();
-    this.socketRef.send(
-      JSON.stringify({
-        command: "fetch_location_bubble",
-      })
-    );
     this.google = window.google;
     const searchBox = new this.google.maps.places.SearchBox(this.$refs.input);
     searchBox.addListener("places_changed", () => {
