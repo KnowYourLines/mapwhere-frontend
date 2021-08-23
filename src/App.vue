@@ -13,6 +13,7 @@
     @fetching-message="fetchingMessage"
     @new-privacy="newPrivacy"
     @found-location-bubble="foundLocationBubble"
+    @isochrone-region="foundIsochroneRegion"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -31,6 +32,7 @@
     :privateRoom="privateRoom"
     :userAllowed="userAllowed"
     :locationBubble="locationBubble"
+    :isochroneRegion="isochroneRegion"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"
@@ -61,6 +63,7 @@ export default {
       privateRoom: false,
       userAllowed: true,
       locationBubble: {},
+      isochroneRegion: "",
     };
   },
   methods: {
@@ -115,6 +118,10 @@ export default {
     },
     foundLocationBubble: function (locationBubble) {
       this.locationBubble = locationBubble;
+      this.isochroneRegion = locationBubble.region;
+    },
+    foundIsochroneRegion: function (region) {
+      this.isochroneRegion = region;
     },
     fetchingMessage: function (message) {
       if (this.$refs.chat.$refs.component.$refs.log) {

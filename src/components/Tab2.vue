@@ -38,6 +38,10 @@
     </div>
     <div v-else>
       <img
+        v-if="
+          isochroneServiceRegion !== 'africa' &&
+          isochroneServiceRegion !== 'central_america'
+        "
         src="@/assets/icons8-public-transportation-50.png"
         v-bind:class="{ active: travelMode === 'transit' }"
         @click="travelMode = 'transit'"
@@ -99,6 +103,10 @@ export default {
       type: Object,
       required: true,
     },
+    isochroneServiceRegion: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -107,10 +115,20 @@ export default {
       possiblePlaces: null,
       yourLocation: null,
       noLocationFound: false,
-      travelMode: "transit",
+      travelMode: "walk",
       hoursToTravel: 0,
       minutesToTravel: 0,
     };
+  },
+  watch: {
+    isochroneServiceRegion: function (newRegion) {
+      if (
+        (newRegion == "africa" || newRegion == "central_america") &&
+        this.travelMode == "transit"
+      ) {
+        this.travelMode = "walk";
+      }
+    },
   },
   methods: {
     allLocationsWrong: function () {
@@ -144,6 +162,7 @@ export default {
             transportation: this.travelMode,
             hours: this.hoursToTravel,
             minutes: this.minutesToTravel,
+            region: this.isochroneServiceRegion,
           })
         );
       }
@@ -153,6 +172,13 @@ export default {
       this.lng = place.geometry.location.lng();
       this.yourLocation = place.name + ", " + place.formatted_address;
       this.possiblePlaces = null;
+      this.socketRef.send(
+        JSON.stringify({
+          command: "get_isochrone_service_region",
+          latitude: this.lat,
+          longitude: this.lng,
+        })
+      );
     },
     getCurrentLocation: function () {
       if (navigator.geolocation) {
@@ -170,6 +196,13 @@ export default {
               this.lat = foundLocation.geometry.location.lat();
               this.lng = foundLocation.geometry.location.lng();
               this.possiblePlaces = null;
+              this.socketRef.send(
+                JSON.stringify({
+                  command: "get_isochrone_service_region",
+                  latitude: this.lat,
+                  longitude: this.lng,
+                })
+              );
             }
           });
         });
@@ -207,6 +240,13 @@ export default {
 
         this.possiblePlaces = null;
         this.noLocationFound = false;
+        this.socketRef.send(
+          JSON.stringify({
+            command: "get_isochrone_service_region",
+            latitude: this.lat,
+            longitude: this.lng,
+          })
+        );
       }
 
       if (places.length > 1) {

@@ -58,6 +58,7 @@
         :socketRef="socketRef"
         :username="username"
         :locationBubble="locationBubble"
+        :isochroneServiceRegion="isochroneRegion"
       ></component>
     </div>
     <div class="column-right">
@@ -135,6 +136,10 @@ export default {
     },
     locationBubble: {
       type: Object,
+      required: true,
+    },
+    isochroneRegion: {
+      type: String,
       required: true,
     },
   },

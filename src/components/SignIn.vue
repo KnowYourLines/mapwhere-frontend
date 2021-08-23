@@ -38,6 +38,7 @@ export default {
     "new-privacy",
     "fetching-message",
     "found-location-bubble",
+    "isochrone-region",
   ],
   data() {
     return {
@@ -270,6 +271,8 @@ export default {
               if (data.location_bubble) {
                 this.$emit("found-location-bubble", data.location_bubble);
               }
+            } else if ("region" in data) {
+              this.$emit("isochrone-region", data.region);
             } else {
               this.$emit("new-message", data.message + "\n");
             }
