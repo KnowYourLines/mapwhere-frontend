@@ -105,7 +105,7 @@ export default {
     },
     isochroneServiceRegion: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   data() {
@@ -152,6 +152,8 @@ export default {
         parseFloat(this.hoursToTravel) == 0
       ) {
         alert("Total travel time cannot be zero!");
+      } else if (!this.isochroneServiceRegion) {
+        alert("Location must be more specific!");
       } else {
         this.socketRef.send(
           JSON.stringify({

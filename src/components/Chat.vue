@@ -140,7 +140,7 @@ export default {
     },
     isochroneRegion: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   methods: {
