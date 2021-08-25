@@ -116,11 +116,13 @@ export default {
     },
     newArea: function (area) {
       this.area = area;
-      if (
-        !this.$refs.chat.$refs.component.$refs.map &&
-        !this.$refs.chat.$refs.component.$refs.noArea
-      ) {
-        this.$refs.chat.$refs.tab3.style.backgroundColor = "#5dbeff";
+      if (this.$refs.chat.$refs.component) {
+        if (
+          !this.$refs.chat.$refs.component.$refs.map &&
+          !this.$refs.chat.$refs.component.$refs.noArea
+        ) {
+          this.$refs.chat.$refs.tab3.style.backgroundColor = "#5dbeff";
+        }
       }
     },
     newUsersMissingLocations: function (users) {
@@ -137,8 +139,10 @@ export default {
           privacy: this.privateRoom,
         })
       );
-      if (this.$refs.chat.$refs.component.$refs.input) {
-        this.$refs.chat.$refs.component.$refs.input.focus();
+      if (this.$refs.chat.$refs.component) {
+        if (this.$refs.chat.$refs.component.$refs.input) {
+          this.$refs.chat.$refs.component.$refs.input.focus();
+        }
       }
     },
     socketCreated: function (socket) {
@@ -169,10 +173,12 @@ export default {
       this.privateRoom = privacy;
     },
     newMessage: function (message) {
-      if (this.$refs.chat.$refs.component.$refs.log) {
-        this.$refs.chat.$refs.component.$refs.log.value += message;
-      } else {
-        this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
+      if (this.$refs.chat.$refs.component) {
+        if (this.$refs.chat.$refs.component.$refs.log) {
+          this.$refs.chat.$refs.component.$refs.log.value += message;
+        } else {
+          this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
+        }
       }
     },
     foundLocationBubble: function (locationBubble) {
@@ -183,13 +189,17 @@ export default {
       this.isochroneRegion = region;
     },
     fetchingMessage: function (message) {
-      if (this.$refs.chat.$refs.component.$refs.log) {
-        this.$refs.chat.$refs.component.$refs.log.value += message;
+      if (this.$refs.chat.$refs.component) {
+        if (this.$refs.chat.$refs.component.$refs.log) {
+          this.$refs.chat.$refs.component.$refs.log.value += message;
+        }
       }
     },
     clearChat: function () {
-      if (this.$refs.chat.$refs.component.$refs.log) {
-        this.$refs.chat.$refs.component.$refs.log.value = "";
+      if (this.$refs.chat.$refs.component) {
+        if (this.$refs.chat.$refs.component.$refs.log) {
+          this.$refs.chat.$refs.component.$refs.log.value = "";
+        }
       }
     },
   },
