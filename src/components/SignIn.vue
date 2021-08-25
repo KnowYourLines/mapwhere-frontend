@@ -39,6 +39,9 @@ export default {
     "fetching-message",
     "found-location-bubble",
     "isochrone-region",
+    "new-area",
+    "users-missing-locations",
+    "new-isochrones",
   ],
   data() {
     return {
@@ -266,7 +269,21 @@ export default {
             } else if ("fetching_message" in data) {
               this.$emit("fetching-message", data.fetching_message + "\n");
             } else if ("refresh_area" in data) {
-              console.log("fetch area");
+              this.socketRef.send(
+                JSON.stringify({ command: "fetch_intersection" })
+              );
+            } else if ("area" in data) {
+              console.log(data.area);
+              this.$emit("new-area", data.area);
+            } else if ("isochrones" in data) {
+              console.log(data.isochrones);
+              this.$emit("new-isochrones", data.isochrones);
+            } else if ("users_missing_locations" in data) {
+              console.log(data.users_missing_locations);
+              this.$emit(
+                "users-missing-locations",
+                data.users_missing_locations
+              );
             } else if ("location_bubble" in data) {
               if (data.location_bubble) {
                 this.$emit("found-location-bubble", data.location_bubble);

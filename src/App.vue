@@ -14,6 +14,9 @@
     @new-privacy="newPrivacy"
     @found-location-bubble="foundLocationBubble"
     @isochrone-region="foundIsochroneRegion"
+    @new-area="newArea"
+    @users-missing-locations="newUsersMissingLocations"
+    @new-isochrones="newIsochrones"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -33,6 +36,8 @@
     :userAllowed="userAllowed"
     :locationBubble="locationBubble"
     :isochroneRegion="isochroneRegion"
+    :area="area"
+    :usersMissingLocations="usersMissingLocations"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"
@@ -64,9 +69,57 @@ export default {
       userAllowed: true,
       locationBubble: {},
       isochroneRegion: "",
+      area: {},
+      usersMissingLocations: [],
     };
   },
   methods: {
+    newIsochrones: function (isochrones) {
+      const turf = window.turf;
+      let intersection = isochrones[0];
+      isochrones.slice(1).forEach((isochrone) => {
+        if (intersection) {
+          let isochroneMultiPolygon = turf.multiPolygon(
+            isochrone.geometry.coordinates
+          );
+          if (intersection.geometry.type == "Polygon") {
+            intersection = turf.intersect(
+              turf.polygon(intersection.geometry.coordinates),
+              isochroneMultiPolygon
+            );
+          }
+          if (intersection.geometry.type == "MultiPolygon") {
+            intersection = turf.intersect(
+              turf.multiPolygon(intersection.geometry.coordinates),
+              isochroneMultiPolygon
+            );
+          }
+        }
+      });
+      console.log(intersection);
+      if (intersection) {
+        let center = turf.centerOfMass(intersection);
+        const newArea = {
+          centroid_lat: center.geometry.coordinates[1],
+          centroid_lng: center.geometry.coordinates[0],
+          type: intersection.geometry.type,
+          coordinates: intersection.geometry.coordinates,
+        };
+        console.log(center);
+        this.socket.send(
+          JSON.stringify({ command: "update_intersection", ...newArea })
+        );
+      } else {
+        console.log('delete')
+        this.socket.send(JSON.stringify({ command: "delete_intersection" }));
+      }
+    },
+    newArea: function (area) {
+      this.area = area;
+    },
+    newUsersMissingLocations: function (users) {
+      this.usersMissingLocations = users;
+    },
     updatePrivacy: function () {
       if (!this.privateRoom) {
         this.joinRequests = [];

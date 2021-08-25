@@ -59,6 +59,8 @@
         :username="username"
         :locationBubble="locationBubble"
         :isochroneServiceRegion="isochroneRegion"
+        :area="area"
+        :usersMissingLocations="usersMissingLocations"
       ></component>
     </div>
     <div class="column-right">
@@ -136,6 +138,14 @@ export default {
     },
     locationBubble: {
       type: Object,
+      required: true,
+    },
+    area: {
+      type: Object,
+      required: true,
+    },
+    usersMissingLocations: {
+      type: Array,
       required: true,
     },
     isochroneRegion: {
