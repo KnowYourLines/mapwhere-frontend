@@ -69,7 +69,7 @@
         class="tab-button"
         width="25"
       /><br />
-      <div id="time-form">
+      <div>
         <input
           ref="hours"
           type="number"
@@ -322,11 +322,5 @@ export default {
 }
 .tab-button.active {
   background: #e0e0e0;
-}
-#time-form {
-  white-space: pre;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>
