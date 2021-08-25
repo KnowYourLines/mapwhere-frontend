@@ -1,6 +1,17 @@
 <template>
-  <div v-if="!missingArea" id="map" ref="map"></div>
-  <div v-else ref="noArea">No area found. <br />Try travelling further.</div>
+  <div>
+    <div v-if="missingLocations">
+      <ul id="array-rendering">
+        <span>Missing user locations for:</span>
+        <li v-for="user in usersMissingLocations" :key="user.username">
+          {{ user.display_name }}
+          <br />
+        </li>
+      </ul>
+    </div>
+    <div v-if="!missingArea" id="map" ref="map"></div>
+    <div v-else ref="noArea">No area found. Try to travel further.</div>
+  </div>
 </template>
 
 <script>
@@ -23,6 +34,7 @@ export default {
   data() {
     return {
       missingArea: false,
+      missingLocations: false,
     };
   },
   beforeUpdate() {
@@ -35,6 +47,11 @@ export default {
       this.missingArea = false;
     } else {
       this.missingArea = true;
+    }
+    if (this.usersMissingLocations.length > 0) {
+      this.missingLocations = true;
+    } else {
+      this.missingLocations = false;
     }
   },
 

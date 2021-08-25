@@ -1,6 +1,8 @@
 <template>
   <div>
+    <div v-if="flagMissingOwnLocation"><br />Missing your location!</div>
     <br />
+
     <img
       src="@/assets/icons8-location-off-50.png"
       @click="getCurrentLocation"
@@ -107,6 +109,14 @@ export default {
       type: String,
       required: false,
     },
+    user: {
+      type: Object,
+      required: true,
+    },
+    usersMissingLocations: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -118,6 +128,7 @@ export default {
       travelMode: "walk",
       hoursToTravel: 0,
       minutesToTravel: 0,
+      flagMissingOwnLocation: false,
     };
   },
   watch: {
@@ -214,6 +225,11 @@ export default {
     },
   },
   mounted() {
+    this.usersMissingLocations.forEach((user) => {
+      if (user.username == this.user.uid) {
+        this.flagMissingOwnLocation = true;
+      }
+    });
     this.$refs.input.focus();
     this.google = window.google;
     const searchBox = new this.google.maps.places.SearchBox(this.$refs.input);
@@ -277,6 +293,12 @@ export default {
       this.hoursToTravel = this.locationBubble.hours;
       this.minutesToTravel = this.locationBubble.minutes;
     }
+    this.flagMissingOwnLocation = false;
+    this.usersMissingLocations.forEach((user) => {
+      if (user.username == this.user.uid) {
+        this.flagMissingOwnLocation = true;
+      }
+    });
   },
 };
 </script>

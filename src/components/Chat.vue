@@ -33,6 +33,7 @@
       </button>
       <button
         class="tab-button"
+        ref="tab2"
         v-bind:class="{ active: currentTabComponent === 'Tab2' }"
         @click="findSelected"
       >
@@ -62,6 +63,7 @@
         :isochroneServiceRegion="isochroneRegion"
         :area="area"
         :usersMissingLocations="usersMissingLocations"
+        :user="user"
       ></component>
     </div>
     <div class="column-right">
@@ -194,6 +196,18 @@ export default {
         this.$refs.component.$refs.input.focus();
       }
     },
+  },
+  beforeUpdate() {
+    if (this.currentTabComponent !== "Tab2") {
+      this.$refs.tab2.style.backgroundColor = null;
+      this.usersMissingLocations.forEach((user) => {
+        if (user.username == this.user.uid) {
+          this.$refs.tab2.style.backgroundColor = "#5dbeff";
+        }
+      });
+    } else {
+      this.$refs.tab2.style.backgroundColor = null;
+    }
   },
 };
 </script>

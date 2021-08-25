@@ -278,6 +278,10 @@ export default {
             } else if ("isochrones" in data) {
               console.log(data.isochrones);
               this.$emit("new-isochrones", data.isochrones);
+            } else if ("refresh_users_missing_locations" in data) {
+              this.socketRef.send(
+                JSON.stringify({ command: "fetch_users_missing_locations" })
+              );
             } else if ("users_missing_locations" in data) {
               console.log(data.users_missing_locations);
               this.$emit(
