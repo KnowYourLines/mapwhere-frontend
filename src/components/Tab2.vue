@@ -76,14 +76,14 @@
           v-model.number.lazy="hoursToTravel"
           min="0"
           @focus="$event.target.select()"
-        /><label> hours </label>
+        /><br /><label> hours </label><br />
         <input
           ref="minutes"
           type="number"
           min="0"
           v-model.number.lazy="minutesToTravel"
           @focus="$event.target.select()"
-        /><label> minutes</label>
+        /><br /><label> minutes</label>
       </div>
       <br />
       <button type="button" class="btn" @click="updateLocationBubble">
