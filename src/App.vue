@@ -110,12 +110,18 @@ export default {
           JSON.stringify({ command: "update_intersection", ...newArea })
         );
       } else {
-        console.log('delete')
+        console.log("delete");
         this.socket.send(JSON.stringify({ command: "delete_intersection" }));
       }
     },
     newArea: function (area) {
       this.area = area;
+      if (
+        !this.$refs.chat.$refs.component.$refs.map &&
+        !this.$refs.chat.$refs.component.$refs.noArea
+      ) {
+        this.$refs.chat.$refs.tab3.style.backgroundColor = "#5dbeff";
+      }
     },
     newUsersMissingLocations: function (users) {
       this.usersMissingLocations = users;

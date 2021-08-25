@@ -40,8 +40,9 @@
       </button>
       <button
         class="tab-button"
+        ref="tab3"
         v-bind:class="{ active: currentTabComponent === 'Tab3' }"
-        @click="currentTabComponent = 'Tab3'"
+        @click="areaSelected"
       >
         Area
       </button>
@@ -164,6 +165,11 @@ export default {
     findSelected: function () {
       this.socketRef.send(JSON.stringify({ command: "fetch_location_bubble" }));
       this.currentTabComponent = "Tab2";
+    },
+    areaSelected: function () {
+      this.socketRef.send(JSON.stringify({ command: "fetch_intersection" }));
+      this.currentTabComponent = "Tab3";
+      this.$refs.tab3.style.backgroundColor = null;
     },
     updateDisplayName: function () {
       this.socketRef.send(
