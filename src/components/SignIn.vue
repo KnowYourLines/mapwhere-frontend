@@ -272,6 +272,10 @@ export default {
               this.socketRef.send(
                 JSON.stringify({ command: "fetch_intersection" })
               );
+            } else if ("recalculate_intersection" in data) {
+              this.socketRef.send(
+                JSON.stringify({ command: "calculate_intersection" })
+              );
             } else if ("area" in data) {
               console.log(data.area);
               this.$emit("new-area", data.area);
