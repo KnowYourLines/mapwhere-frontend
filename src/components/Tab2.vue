@@ -163,6 +163,10 @@ export default {
         parseFloat(this.hoursToTravel) == 0
       ) {
         alert("Total travel time cannot be zero!");
+      } else if (
+        (parseFloat(this.minutesToTravel) * 60) + (parseFloat(this.hoursToTravel) * 3600) > 7200
+      ) {
+        alert("Total travel time cannot be more than 2 hours!");
       } else if (!this.isochroneServiceRegion) {
         alert("Location must be more specific!");
       } else {
