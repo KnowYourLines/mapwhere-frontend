@@ -180,7 +180,6 @@ export default {
           name: this.username,
         })
       );
-      this.socketRef.send(JSON.stringify({ command: "fetch_display_name" }));
       if (this.$refs.component.$refs.input) {
         this.$refs.component.$refs.input.focus();
       }
