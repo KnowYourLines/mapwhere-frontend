@@ -42,6 +42,8 @@ export default {
     "new-area",
     "users-missing-locations",
     "new-isochrones",
+    "highlight-chat",
+    "highlight-area",
   ],
   data() {
     return {
@@ -139,7 +141,7 @@ export default {
             );
 
             this.socketRef.send(
-              JSON.stringify({ command: "fetch_user_notifications" })
+              JSON.stringify({ command: "find_login_highlights" })
             );
             this.socketRef.send(
               JSON.stringify({
@@ -298,6 +300,11 @@ export default {
               }
             } else if ("region" in data) {
               this.$emit("isochrone-region", data.region);
+            } else if ("highlight_chat" in data) {
+              console.log("highlight_chat");
+              this.$emit("highlight-chat");
+            } else if ("highlight_area" in data) {
+              this.$emit("highlight-area");
             } else {
               this.$emit("new-message", data.message + "\n");
             }

@@ -17,6 +17,8 @@
     @new-area="newArea"
     @users-missing-locations="newUsersMissingLocations"
     @new-isochrones="newIsochrones"
+    @highlight-area="highlightArea"
+    @highlight-chat="highlightChat"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -125,6 +127,16 @@ export default {
         }
       }
     },
+    highlightArea: function () {
+      if (this.$refs.chat.$refs.component) {
+        if (
+          !this.$refs.chat.$refs.component.$refs.map &&
+          !this.$refs.chat.$refs.component.$refs.noArea
+        ) {
+          this.$refs.chat.$refs.tab3.style.backgroundColor = "#5dbeff";
+        }
+      }
+    },
     newUsersMissingLocations: function (users) {
       this.usersMissingLocations = users;
     },
@@ -177,6 +189,13 @@ export default {
         if (this.$refs.chat.$refs.component.$refs.log) {
           this.$refs.chat.$refs.component.$refs.log.value += message;
         } else {
+          this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
+        }
+      }
+    },
+    highlightChat: function () {
+      if (this.$refs.chat.$refs.component) {
+        if (!this.$refs.chat.$refs.component.$refs.log) {
           this.$refs.chat.$refs.tab1.style.backgroundColor = "#5dbeff";
         }
       }
