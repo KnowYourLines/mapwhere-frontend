@@ -9,7 +9,7 @@
         type="text"
         autocomplete="on"
         :value="roomName"
-        @input="$emit('update:roomName', $event.target.value)"
+        @change="$emit('update:roomName', $event.target.value)"
         @keyup.enter="updateRoomName"
         @focus="$event.target.select()"
       /><br />
@@ -18,7 +18,7 @@
         type="text"
         autocomplete="on"
         :value="username"
-        @input="$emit('update:username', $event.target.value)"
+        @change="$emit('update:username', $event.target.value)"
         @keyup.enter="updateDisplayName"
         @focus="$event.target.select()"
       />
