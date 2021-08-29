@@ -139,10 +139,6 @@ export default {
             this.socketRef.send(
               JSON.stringify({ command: "fetch_display_name" })
             );
-
-            this.socketRef.send(
-              JSON.stringify({ command: "find_login_highlights" })
-            );
             this.socketRef.send(
               JSON.stringify({
                 command: "fetch_location_bubble",
