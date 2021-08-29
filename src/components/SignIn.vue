@@ -38,7 +38,7 @@ export default {
     "new-privacy",
     "fetching-message",
     "found-location-bubble",
-    "isochrone-region",
+    "isochrone-regions",
     "new-area",
     "users-missing-locations",
     "new-isochrones",
@@ -298,8 +298,13 @@ export default {
               if (data.location_bubble) {
                 this.$emit("found-location-bubble", data.location_bubble);
               }
-            } else if ("region" in data) {
-              this.$emit("isochrone-region", data.region);
+            } else if ("region_isochrones" in data) {
+              this.$emit(
+                "isochrone-regions",
+                data.region_isochrones,
+                data.location_lng,
+                data.location_lat
+              );
             } else if ("highlight_chat" in data) {
               console.log("highlight_chat");
               this.$emit("highlight-chat");

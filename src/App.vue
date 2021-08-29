@@ -13,7 +13,7 @@
     @fetching-message="fetchingMessage"
     @new-privacy="newPrivacy"
     @found-location-bubble="foundLocationBubble"
-    @isochrone-region="foundIsochroneRegion"
+    @isochrone-regions="findIsochroneRegion"
     @new-area="newArea"
     @users-missing-locations="newUsersMissingLocations"
     @new-isochrones="newIsochrones"
@@ -204,8 +204,48 @@ export default {
       this.locationBubble = locationBubble;
       this.isochroneRegion = locationBubble.region;
     },
-    foundIsochroneRegion: function (region) {
-      this.isochroneRegion = region;
+    findIsochroneRegion: function (regionIsochrones, locationLng, locationLat) {
+      const turf = window.turf;
+      const location = turf.point([locationLng, locationLat]);
+      const possibleRegions = [];
+      regionIsochrones.forEach((regionIsochrone) => {
+        let isochroneMultiPolygon = turf.multiPolygon(
+          regionIsochrone.isochrone.geometry.coordinates
+        );
+        let isochroneAsLines = turf.polygonToLine(isochroneMultiPolygon);
+        let locationDistanceFromIsochrone = turf.nearestPointOnLine(
+          isochroneAsLines,
+          location,
+          {
+            units: "degrees",
+          }
+        ).properties.dist;
+        let isochroneArea = turf.area(isochroneMultiPolygon);
+        if (locationDistanceFromIsochrone < 0.001) {
+          possibleRegions.push({
+            area: isochroneArea,
+            regionName: regionIsochrone.region,
+            travelMode: regionIsochrone.travel_mode,
+          });
+        }
+      });
+      if (possibleRegions.length > 0) {
+        let userRegion = possibleRegions[0];
+        possibleRegions.slice(1).forEach((region) => {
+          if (
+            userRegion.area < region.area &&
+            userRegion.travelMode == "walk" &&
+            region.travelMode == "transit" &&
+            region.regionName != "central_america"
+          ) {
+            userRegion = region;
+          }
+        });
+        this.isochroneRegion = userRegion.regionName;
+      } else {
+        this.isochroneRegion = "";
+      }
+      console.log(this.isochroneRegion);
     },
     fetchingMessage: function (message) {
       if (this.$refs.chat.$refs.component) {

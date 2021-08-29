@@ -164,7 +164,9 @@ export default {
       ) {
         alert("Total travel time cannot be zero!");
       } else if (
-        (parseFloat(this.minutesToTravel) * 60) + (parseFloat(this.hoursToTravel) * 3600) > 7200
+        parseFloat(this.minutesToTravel) * 60 +
+          parseFloat(this.hoursToTravel) * 3600 >
+        7200
       ) {
         alert("Total travel time cannot be more than 2 hours!");
       } else if (!this.isochroneServiceRegion) {
