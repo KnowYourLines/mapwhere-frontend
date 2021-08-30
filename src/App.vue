@@ -274,18 +274,6 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-.column-left {
-  float: left;
-  width: 33.333%;
-}
-.column-right {
-  float: right;
-  width: 33.333%;
-}
-.column-center {
-  display: inline-block;
-  width: 33.333%;
-}
 .toggle-container {
   display: inline-block;
 }

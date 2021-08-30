@@ -382,4 +382,29 @@ li {
 a {
   color: #42b983;
 }
+@media (orientation: landscape) {
+  .column-left {
+    float: left;
+    width: 33.333%;
+  }
+  .column-right {
+    float: right;
+    width: 33.333%;
+  }
+  .column-center {
+    display: inline-block;
+    width: 33.333%;
+  }
+}
+@media (orientation: portrait) {
+  .column-left {
+    width: 100%;
+  }
+  .column-right {
+    width: 100%;
+  }
+  .column-center {
+    width: 100%;
+  }
+}
 </style>

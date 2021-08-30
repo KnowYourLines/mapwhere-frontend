@@ -10,12 +10,12 @@
       width="25"
     /><br />
     <input
-      ref="input"
+      ref="location"
       class="controls"
       type="text"
       :value="yourLocation"
       placeholder="Enter start location"
-      @keyup.enter="$refs.input.value = yourLocation"
+      @keyup.enter="$refs.location.value = yourLocation"
       @focus="$event.target.select()"
     />
     <div v-if="noLocationFound"><br />No location found.</div>
@@ -236,7 +236,6 @@ export default {
         this.flagMissingOwnLocation = true;
       }
     });
-    this.$refs.input.focus();
     this.google = window.google;
     const searchBox = new this.google.maps.places.SearchBox(this.$refs.input);
     searchBox.addListener("places_changed", () => {
