@@ -208,7 +208,7 @@ export default {
           this.$refs.tab2.style.backgroundColor = "#5dbeff";
         }
       });
-    } else {
+    } else if (this.$refs.tab2) {
       this.$refs.tab2.style.backgroundColor = null;
     }
   },
