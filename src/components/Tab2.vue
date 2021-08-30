@@ -237,7 +237,7 @@ export default {
       }
     });
     this.google = window.google;
-    const searchBox = new this.google.maps.places.SearchBox(this.$refs.input);
+    const searchBox = new this.google.maps.places.SearchBox(this.$refs.location);
     searchBox.addListener("places_changed", () => {
       const places = searchBox.getPlaces();
 
