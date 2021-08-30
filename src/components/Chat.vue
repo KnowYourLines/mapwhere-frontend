@@ -232,11 +232,11 @@ export default {
 @media (orientation: portrait) {
   .column-left {
     width: 100%;
-    background-color: rgb(184, 233, 255);
+    background-color: rgb(227, 246, 255);
   }
   .column-right {
     width: 100%;
-    background-color: rgb(184, 233, 255);
+    background-color: rgb(227, 246, 255);
   }
   .column-center {
     width: 100%;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="column-center">
+    <div class="column">
       <section v-if="showSignIn" id="firebaseui-auth-container"></section>
       <div class="column-center">
         <button v-if="shareable" @click="share">Share</button>
@@ -383,6 +383,10 @@ a {
   color: #42b983;
 }
 @media (orientation: landscape) {
+  .column {
+    display: inline-block;
+    width: 33.333%;
+  }
   .column-left {
     float: left;
     width: 33.333%;
@@ -397,14 +401,20 @@ a {
   }
 }
 @media (orientation: portrait) {
+  .column {
+    display: inline-block;
+    width: 100%;
+  }
   .column-left {
     width: 100%;
   }
   .column-right {
     width: 100%;
+    padding-bottom: 1em;
   }
   .column-center {
     width: 100%;
+    padding-bottom: 1em;
   }
 }
 </style>
