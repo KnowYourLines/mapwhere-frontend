@@ -10,9 +10,9 @@
       </ul>
     </div>
     <div v-if="!missingArea" id="v-model-select-dynamic" class="demo">
-      <br /><span>Look for: {{ selected }}</span
-      ><br />
+      <br />
       <select v-model="selected">
+        <option :value="null" selected disabled hidden>Look for...</option>
         <option
           v-for="option in options"
           :value="option.value"
@@ -48,7 +48,7 @@ export default {
     return {
       missingArea: false,
       missingLocations: false,
-      selected: "supermarket",
+      selected: null,
       options: [
         { text: "Accounting", value: "accounting" },
         { text: "Airport", value: "airport" },
