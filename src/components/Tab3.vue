@@ -11,7 +11,7 @@
     </div>
     <div v-if="!missingArea" id="v-model-select-dynamic" class="demo">
       <br />
-      <select v-model="selected">
+      <select v-model="selected" @change="placeTypeSelected">
         <option :value="null" selected disabled hidden>Look for...</option>
         <option
           v-for="option in options"
@@ -149,6 +149,67 @@ export default {
       ],
     };
   },
+  methods: {
+    placeTypeSelected: function () {
+      const places = new window.google.maps.places.PlacesService(this.map);
+      const turf = window.turf;
+      let intersection;
+      let bbox;
+      let markers = [];
+
+      if (this.area.type == "Polygon") {
+        intersection = turf.polygon(this.area.coordinates);
+        bbox = turf.bbox(intersection);
+      }
+      if (this.area.type == "MultiPolygon") {
+        intersection = turf.multiPolygon(this.area.coordinates);
+        bbox = turf.bbox(intersection);
+      }
+      const sw = { lat: bbox[1], lng: bbox[0] };
+      const ne = { lat: bbox[3], lng: bbox[2] };
+
+      const search = {
+        bounds: new window.google.maps.LatLngBounds(sw, ne),
+        types: [this.selected],
+      };
+      places.nearbySearch(search, (results, status) => {
+        if (
+          status === window.google.maps.places.PlacesServiceStatus.OK &&
+          results
+        ) {
+          // clearResults();
+          for (let i = 0; i < markers.length; i++) {
+            if (markers[i]) {
+              markers[i].setMap(null);
+            }
+          }
+          markers = [];
+
+          // Create a marker for each hotel found, and
+          // assign a letter of the alphabetic to each marker icon.
+          for (let i = 0; i < results.length; i++) {
+            // Use marker animation to drop the icons incrementally on the map.
+            markers[i] = new window.google.maps.Marker({
+              position: results[i].geometry.location,
+              animation: window.google.maps.Animation.DROP,
+            });
+            // If the user clicks a hotel marker, show the details of that hotel
+            // in an info window.
+            markers[i].placeResult = results[i];
+            // google.maps.event.addListener(markers[i], "click", showInfoWindow);
+
+            setTimeout(
+              function () {
+                markers[i].setMap(this.map);
+              }.bind(this),
+              i * 100
+            );
+            // addResult(results[i], i);
+          }
+        }
+      });
+    },
+  },
   beforeUpdate() {
     if (
       this.area.type &&
@@ -170,7 +231,7 @@ export default {
   updated() {
     if (!this.missingArea) {
       this.missingArea = false;
-      const map = new window.google.maps.Map(this.$refs.map, {
+      this.map = new window.google.maps.Map(this.$refs.map, {
         zoom: 15,
         center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
       });
@@ -186,7 +247,7 @@ export default {
           },
         ],
       };
-      map.data.addGeoJson(geoJson);
+      this.map.data.addGeoJson(geoJson);
     }
   },
 };
