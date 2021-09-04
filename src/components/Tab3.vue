@@ -25,27 +25,27 @@
       </div>
       <div id="map" ref="map"></div>
       <div style="display: none">
-        <div id="info-content">
+        <div ref="info_content" id="info-content">
           <table>
-            <tr ref="" id="iw-url-row" class="iw_table_row">
-              <td id="iw-icon" class="iw_table_icon"></td>
-              <td id="iw-url"></td>
+            <tr ref="iw_url_row" id="iw-url-row" class="iw_table_row">
+              <td ref="iw_icon" id="iw-icon" class="iw_table_icon"></td>
+              <td ref="iw_url" id="iw-url"></td>
             </tr>
-            <tr id="iw-address-row" class="iw_table_row">
+            <tr ref="iw_address_row" id="iw-address-row" class="iw_table_row">
               <td class="iw_attribute_name">Address:</td>
-              <td id="iw-address"></td>
+              <td ref="iw_address" id="iw-address"></td>
             </tr>
-            <tr id="iw-phone-row" class="iw_table_row">
+            <tr ref="iw_phone_row" id="iw-phone-row" class="iw_table_row">
               <td class="iw_attribute_name">Telephone:</td>
-              <td id="iw-phone"></td>
+              <td ref="iw_phone" id="iw-phone"></td>
             </tr>
-            <tr id="iw-rating-row" class="iw_table_row">
+            <tr ref="iw_rating_row" id="iw-rating-row" class="iw_table_row">
               <td class="iw_attribute_name">Rating:</td>
-              <td id="iw-rating"></td>
+              <td ref="iw_rating" id="iw-rating"></td>
             </tr>
-            <tr id="iw-website-row" class="iw_table_row">
+            <tr ref="iw_website_row" id="iw-website-row" class="iw_table_row">
               <td class="iw_attribute_name">Website:</td>
-              <td id="iw-website"></td>
+              <td ref="iw_website" id="iw-website"></td>
             </tr>
           </table>
         </div>
@@ -126,7 +126,7 @@ export default {
         { text: "Insurance Agency", value: "insurance_agency" },
         { text: "Jewelry Store", value: "jewelry_store" },
         { text: "Laundry", value: "laundry" },
-        { text: "Lawyer", value: "Lawyer" },
+        { text: "Lawyer", value: "lawyer" },
         { text: "Library", value: "library" },
         { text: "Light Rail Station", value: "light_rail_station" },
         { text: "Liquor Store", value: "liquor_store" },
@@ -181,7 +181,7 @@ export default {
     placeTypeSelected: function () {
       const places = new window.google.maps.places.PlacesService(this.map);
       const infoWindow = new window.google.maps.InfoWindow({
-        content: document.getElementById("info-content"),
+        content: this.$refs.info_content,
       });
 
       const turf = window.turf;
@@ -223,15 +223,13 @@ export default {
               position: results[i].geometry.location,
               animation: window.google.maps.Animation.DROP,
             });
-            // If the user clicks a hotel marker, show the details of that hotel
-            // in an info window.
+            // If the user clicks a marker, show the details in an info window.
             markers[i].placeResult = results[i];
-            const map = this.map;
             window.google.maps.event.addListener(
               markers[i],
               "click",
               function () {
-                const marker = this;
+                const marker = markers[i];
                 places.getDetails(
                   { placeId: marker.placeResult.place_id },
                   (place, status) => {
@@ -241,26 +239,23 @@ export default {
                     ) {
                       return;
                     }
-                    infoWindow.open(map, marker);
-                    document.getElementById("iw-icon").innerHTML =
+                    infoWindow.open(this.map, marker);
+                    this.$refs.iw_icon.innerHTML =
                       '<img src="' + place.icon + '"/>';
-                    document.getElementById("iw-url").innerHTML =
+                    this.$refs.iw_url.innerHTML =
                       '<b><a href="' +
                       place.url +
                       '" target="_blank" rel="noopener noreferrer">' +
                       place.name +
                       "</a></b>";
-                    document.getElementById("iw-address").textContent =
-                      place.vicinity;
+                    this.$refs.iw_address.textContent = place.vicinity;
 
                     if (place.formatted_phone_number) {
-                      document.getElementById("iw-phone-row").style.display =
-                        "";
-                      document.getElementById("iw-phone").textContent =
+                      this.$refs.iw_phone_row.style.display = "";
+                      this.$refs.iw_phone.textContent =
                         place.formatted_phone_number;
                     } else {
-                      document.getElementById("iw-phone-row").style.display =
-                        "none";
+                      this.$refs.iw_phone_row.style.display = "none";
                     }
 
                     if (place.rating) {
@@ -272,32 +267,27 @@ export default {
                         } else {
                           ratingHtml += "&#10029;";
                         }
-                        document.getElementById("iw-rating-row").style.display =
-                          "";
-                        document.getElementById("iw-rating").innerHTML =
-                          ratingHtml;
+                        this.$refs.iw_rating_row.style.display = "";
+                        this.$refs.iw_rating.innerHTML = ratingHtml;
                       }
                     } else {
-                      document.getElementById("iw-rating-row").style.display =
-                        "none";
+                      this.$refs.iw_rating_row.style.display = "none";
                     }
 
                     if (place.website) {
-                      document.getElementById("iw-website-row").style.display =
-                        "";
-                      document.getElementById("iw-website").innerHTML =
+                      this.$refs.iw_website_row.style.display = "";
+                      this.$refs.iw_website.innerHTML =
                         '<b><a href="' +
                         place.website +
                         '" target="_blank" rel="noopener noreferrer">' +
                         place.website +
                         "</a></b>";
                     } else {
-                      document.getElementById("iw-website-row").style.display =
-                        "none";
+                      this.$refs.iw_website_row.style.display = "none";
                     }
                   }
                 );
-              }
+              }.bind(this)
             );
 
             setTimeout(
