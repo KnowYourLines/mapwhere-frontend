@@ -9,20 +9,48 @@
         </li>
       </ul>
     </div>
-    <div v-if="!missingArea" id="v-model-select-dynamic" class="demo">
-      <br />
-      <select v-model="selected" @change="placeTypeSelected">
-        <option :value="null" selected disabled hidden>Look for...</option>
-        <option
-          v-for="option in options"
-          :value="option.value"
-          :key="option.value"
-        >
-          {{ option.text }}
-        </option>
-      </select>
+    <div v-if="!missingArea">
+      <div id="v-model-select-dynamic" class="demo">
+        <br />
+        <select v-model="selected" @change="placeTypeSelected">
+          <option :value="null" selected disabled hidden>Look for...</option>
+          <option
+            v-for="option in options"
+            :value="option.value"
+            :key="option.value"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <div id="map" ref="map"></div>
+      <div style="display: none">
+        <div id="info-content">
+          <table>
+            <tr ref="" id="iw-url-row" class="iw_table_row">
+              <td id="iw-icon" class="iw_table_icon"></td>
+              <td id="iw-url"></td>
+            </tr>
+            <tr id="iw-address-row" class="iw_table_row">
+              <td class="iw_attribute_name">Address:</td>
+              <td id="iw-address"></td>
+            </tr>
+            <tr id="iw-phone-row" class="iw_table_row">
+              <td class="iw_attribute_name">Telephone:</td>
+              <td id="iw-phone"></td>
+            </tr>
+            <tr id="iw-rating-row" class="iw_table_row">
+              <td class="iw_attribute_name">Rating:</td>
+              <td id="iw-rating"></td>
+            </tr>
+            <tr id="iw-website-row" class="iw_table_row">
+              <td class="iw_attribute_name">Website:</td>
+              <td id="iw-website"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
-    <div v-if="!missingArea" id="map" ref="map"></div>
     <div v-else ref="noArea">No area found. Try to travel further.</div>
   </div>
 </template>
@@ -105,7 +133,7 @@ export default {
         { text: "Local Government Office", value: "local_government_office" },
         { text: "Locksmith", value: "locksmith" },
         { text: "Lodging", value: "lodging" },
-        { text: "Meal_delivery", value: "meal_delivery" },
+        { text: "Meal Delivery", value: "meal_delivery" },
         { text: "Meal Takeaway", value: "meal_takeaway" },
         { text: "Mosque", value: "mosque" },
         { text: "Movie Rental", value: "movie_rental" },
@@ -152,6 +180,10 @@ export default {
   methods: {
     placeTypeSelected: function () {
       const places = new window.google.maps.places.PlacesService(this.map);
+      const infoWindow = new window.google.maps.InfoWindow({
+        content: document.getElementById("info-content"),
+      });
+
       const turf = window.turf;
       let intersection;
       let bbox;
@@ -185,8 +217,6 @@ export default {
           }
           markers = [];
 
-          // Create a marker for each hotel found, and
-          // assign a letter of the alphabetic to each marker icon.
           for (let i = 0; i < results.length; i++) {
             // Use marker animation to drop the icons incrementally on the map.
             markers[i] = new window.google.maps.Marker({
@@ -196,7 +226,79 @@ export default {
             // If the user clicks a hotel marker, show the details of that hotel
             // in an info window.
             markers[i].placeResult = results[i];
-            // google.maps.event.addListener(markers[i], "click", showInfoWindow);
+            const map = this.map;
+            window.google.maps.event.addListener(
+              markers[i],
+              "click",
+              function () {
+                const marker = this;
+                places.getDetails(
+                  { placeId: marker.placeResult.place_id },
+                  (place, status) => {
+                    if (
+                      status !==
+                      window.google.maps.places.PlacesServiceStatus.OK
+                    ) {
+                      return;
+                    }
+                    infoWindow.open(map, marker);
+                    document.getElementById("iw-icon").innerHTML =
+                      '<img src="' + place.icon + '"/>';
+                    document.getElementById("iw-url").innerHTML =
+                      '<b><a href="' +
+                      place.url +
+                      '" target="_blank" rel="noopener noreferrer">' +
+                      place.name +
+                      "</a></b>";
+                    document.getElementById("iw-address").textContent =
+                      place.vicinity;
+
+                    if (place.formatted_phone_number) {
+                      document.getElementById("iw-phone-row").style.display =
+                        "";
+                      document.getElementById("iw-phone").textContent =
+                        place.formatted_phone_number;
+                    } else {
+                      document.getElementById("iw-phone-row").style.display =
+                        "none";
+                    }
+
+                    if (place.rating) {
+                      let ratingHtml = "";
+
+                      for (let i = 0; i < 5; i++) {
+                        if (place.rating < i + 0.5) {
+                          ratingHtml += "&#10025;";
+                        } else {
+                          ratingHtml += "&#10029;";
+                        }
+                        document.getElementById("iw-rating-row").style.display =
+                          "";
+                        document.getElementById("iw-rating").innerHTML =
+                          ratingHtml;
+                      }
+                    } else {
+                      document.getElementById("iw-rating-row").style.display =
+                        "none";
+                    }
+
+                    if (place.website) {
+                      document.getElementById("iw-website-row").style.display =
+                        "";
+                      document.getElementById("iw-website").innerHTML =
+                        '<b><a href="' +
+                        place.website +
+                        '" target="_blank" rel="noopener noreferrer">' +
+                        place.website +
+                        "</a></b>";
+                    } else {
+                      document.getElementById("iw-website-row").style.display =
+                        "none";
+                    }
+                  }
+                );
+              }
+            );
 
             setTimeout(
               function () {
