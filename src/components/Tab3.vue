@@ -116,6 +116,7 @@ export default {
       missingArea: false,
       missingLocations: false,
       placeResults: [],
+      selectedResultIndex: null,
       markers: [],
       selected: null,
       options: [
@@ -217,6 +218,37 @@ export default {
         { text: "Zoo", value: "zoo" },
       ],
     };
+  },
+  watch: {
+    placeResults: function (newResults) {
+      if (newResults.length > 0) {
+        console.log("found results");
+      } else {
+        console.log("now results");
+      }
+    },
+    area: function () {
+      if (!this.missingArea) {
+        this.missingArea = false;
+        this.map = new window.google.maps.Map(this.$refs.map, {
+          zoom: 15,
+          center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
+        });
+        const geoJson = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: this.area.type,
+                coordinates: this.area.coordinates,
+              },
+            },
+          ],
+        };
+        this.map.data.addGeoJson(geoJson);
+      }
+    },
   },
   methods: {
     selectedResult: function (index) {
@@ -371,29 +403,6 @@ export default {
       this.missingLocations = true;
     } else {
       this.missingLocations = false;
-    }
-  },
-
-  updated() {
-    if (!this.missingArea) {
-      this.missingArea = false;
-      this.map = new window.google.maps.Map(this.$refs.map, {
-        zoom: 15,
-        center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
-      });
-      const geoJson = {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            geometry: {
-              type: this.area.type,
-              coordinates: this.area.coordinates,
-            },
-          },
-        ],
-      };
-      this.map.data.addGeoJson(geoJson);
     }
   },
 };
