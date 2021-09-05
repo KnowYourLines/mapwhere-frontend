@@ -10,6 +10,19 @@
       </ul>
     </div>
     <div v-if="!missingArea">
+      <div id="v-model-select-dynamic" class="demo">
+        <br />
+        <select v-model="selected" @change="placeTypeSelected">
+          <option :value="null" selected disabled hidden>Look for...</option>
+          <option
+            v-for="option in options"
+            :value="option.value"
+            :key="option.value"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
       <div
         :style="[
           placeResults.length > 0
@@ -17,19 +30,6 @@
             : { float: 'left', width: '100%' },
         ]"
       >
-        <div id="v-model-select-dynamic" class="demo">
-          <br />
-          <select v-model="selected" @change="placeTypeSelected">
-            <option :value="null" selected disabled hidden>Look for...</option>
-            <option
-              v-for="option in options"
-              :value="option.value"
-              :key="option.value"
-            >
-              {{ option.text }}
-            </option>
-          </select>
-        </div>
         <div id="map" ref="map"></div>
         <div style="display: none">
           <div ref="infoContent" id="info-content">
@@ -83,7 +83,6 @@
             : { float: 'right', width: '0%' },
         ]"
       >
-        <br /><br />
         <div v-if="placeResults.length" id="listing">
           <table>
             <tbody>
