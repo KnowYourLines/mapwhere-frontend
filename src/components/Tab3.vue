@@ -73,6 +73,10 @@
                 </td>
               </tr>
             </table>
+            <br />
+            <button type="submit" class="btn btn__primary" @click="savePlace">
+              Save place
+            </button>
           </div>
         </div>
       </div>
@@ -278,6 +282,15 @@ export default {
     },
   },
   methods: {
+    savePlace: function () {
+      let placeToSave = this.placeResults[this.selectedResultIndex];
+      let placeId = placeToSave.place_id;
+      let placeLng = placeToSave.geometry.location.lng();
+      let placeLat = placeToSave.geometry.location.lat();
+      console.log(placeId);
+      console.log(placeLat);
+      console.log(placeLng);
+    },
     selectedResult: function (index) {
       this.selectedResultIndex = index;
       window.google.maps.event.trigger(this.markers[index], "click");
