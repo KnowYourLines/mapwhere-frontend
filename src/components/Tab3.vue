@@ -236,7 +236,7 @@ export default {
           const clearResults = this.$refs.results;
 
           while (clearResults.childNodes[0]) {
-            clearResults.removeChild(results.childNodes[0]);
+            clearResults.removeChild(clearResults.childNodes[0]);
           }
 
           for (let i = 0; i < markers.length; i++) {
@@ -347,9 +347,16 @@ export default {
             tr.onclick = function () {
               window.google.maps.event.trigger(markers[i], "click");
             };
+            const iconTd = document.createElement("td");
             const nameTd = document.createElement("td");
+            const icon = document.createElement("img");
+            icon.src = filteredResults[i].icon;
+            icon.setAttribute("class", "placeIcon");
+            icon.setAttribute("className", "placeIcon");
             const name = document.createTextNode(filteredResults[i].name);
+            iconTd.appendChild(icon);
             nameTd.appendChild(name);
+            tr.appendChild(iconTd);
             tr.appendChild(nameTd);
             saveResults.appendChild(tr);
           }
