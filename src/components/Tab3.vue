@@ -10,7 +10,13 @@
       </ul>
     </div>
     <div v-if="!missingArea">
-      <div class="column-left">
+      <div
+        :style="[
+          placeResults.length > 0
+            ? { float: 'left', width: '70%' }
+            : { float: 'left', width: '100%' },
+        ]"
+      >
         <div id="v-model-select-dynamic" class="demo">
           <br />
           <select v-model="selected" @change="placeTypeSelected">
@@ -70,7 +76,13 @@
           </div>
         </div>
       </div>
-      <div class="column-right">
+      <div
+        :style="[
+          placeResults.length > 0
+            ? { float: 'right', width: '30%' }
+            : { float: 'right', width: '0%' },
+        ]"
+      >
         <br /><br />
         <div id="listing">
           <table>
@@ -224,12 +236,11 @@ export default {
       if (newResults.length > 0) {
         console.log("found results");
       } else {
-        console.log("now results");
+        console.log("no results");
       }
     },
     area: function () {
       if (!this.missingArea) {
-        this.missingArea = false;
         this.map = new window.google.maps.Map(this.$refs.map, {
           zoom: 15,
           center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
@@ -412,14 +423,7 @@ export default {
 #map {
   height: 100vh;
 }
-.column-left {
-  float: left;
-  width: 70%;
-}
-.column-right {
-  float: right;
-  width: 30%;
-}
+
 #listing {
   height: 100vh;
   overflow-y: auto;
