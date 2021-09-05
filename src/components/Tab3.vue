@@ -251,6 +251,9 @@ export default {
         };
         this.map.data.addGeoJson(geoJson);
       }
+      if (this.selected) {
+        this.placeTypeSelected();
+      }
     },
     markers: function () {
       if (!this.missingArea) {
