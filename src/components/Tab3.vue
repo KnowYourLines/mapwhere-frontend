@@ -10,67 +10,71 @@
       </ul>
     </div>
     <div v-if="!missingArea">
-      <div id="v-model-select-dynamic" class="demo">
-        <br />
-        <select v-model="selected" @change="placeTypeSelected">
-          <option :value="null" selected disabled hidden>Look for...</option>
-          <option
-            v-for="option in options"
-            :value="option.value"
-            :key="option.value"
-          >
-            {{ option.text }}
-          </option>
-        </select>
+      <div class="column-left">
+        <div id="v-model-select-dynamic" class="demo">
+          <br />
+          <select v-model="selected" @change="placeTypeSelected">
+            <option :value="null" selected disabled hidden>Look for...</option>
+            <option
+              v-for="option in options"
+              :value="option.value"
+              :key="option.value"
+            >
+              {{ option.text }}
+            </option>
+          </select>
+        </div>
+        <div id="map" ref="map"></div>
+        <div style="display: none">
+          <div ref="infoContent" id="info-content">
+            <table>
+              <tr ref="iwUrlRow" id="iw-url-row" class="iw_table_row">
+                <td ref="iwIcon" id="iw-icon" class="iw_table_icon">
+                  <img ref="icon" />
+                </td>
+                <td ref="iwURL" id="iw-url">
+                  <b
+                    ><a
+                      ref="mapsURL"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    ></a
+                  ></b>
+                </td>
+              </tr>
+              <tr ref="iwAddressRow" id="iw-address-row" class="iw_table_row">
+                <td class="iw_attribute_name">Address:</td>
+                <td ref="iwAddress" id="iw-address"></td>
+              </tr>
+              <tr ref="iwPhoneRow" id="iw-phone-row" class="iw_table_row">
+                <td class="iw_attribute_name">Telephone:</td>
+                <td ref="iwPhone" id="iw-phone"></td>
+              </tr>
+              <tr ref="iwRatingRow" id="iw-rating-row" class="iw_table_row">
+                <td class="iw_attribute_name">Rating:</td>
+                <td ref="iwRating" id="iw-rating"></td>
+              </tr>
+              <tr ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
+                <td class="iw_attribute_name">Website:</td>
+                <td ref="iwWebsite" id="iw-website">
+                  <b
+                    ><a
+                      ref="websiteURL"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    ></a
+                  ></b>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </div>
-      <div id="map" ref="map"></div>
-      <div ref="listing" id="listing">
-        <table ref="resultsTable" id="resultsTable">
-          <tbody ref="results" id="results"></tbody>
-        </table>
-      </div>
-
-      <div style="display: none">
-        <div ref="infoContent" id="info-content">
-          <table>
-            <tr ref="iwUrlRow" id="iw-url-row" class="iw_table_row">
-              <td ref="iwIcon" id="iw-icon" class="iw_table_icon">
-                <img ref="icon" />
-              </td>
-              <td ref="iwURL" id="iw-url">
-                <b
-                  ><a
-                    ref="mapsURL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  ></a
-                ></b>
-              </td>
-            </tr>
-            <tr ref="iwAddressRow" id="iw-address-row" class="iw_table_row">
-              <td class="iw_attribute_name">Address:</td>
-              <td ref="iwAddress" id="iw-address"></td>
-            </tr>
-            <tr ref="iwPhoneRow" id="iw-phone-row" class="iw_table_row">
-              <td class="iw_attribute_name">Telephone:</td>
-              <td ref="iwPhone" id="iw-phone"></td>
-            </tr>
-            <tr ref="iwRatingRow" id="iw-rating-row" class="iw_table_row">
-              <td class="iw_attribute_name">Rating:</td>
-              <td ref="iwRating" id="iw-rating"></td>
-            </tr>
-            <tr ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
-              <td class="iw_attribute_name">Website:</td>
-              <td ref="iwWebsite" id="iw-website">
-                <b
-                  ><a
-                    ref="websiteURL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  ></a
-                ></b>
-              </td>
-            </tr>
+      <div class="column-right">
+        <br /><br />
+        <div ref="listing" id="listing">
+          <table ref="resultsTable" id="resultsTable">
+            <tbody ref="results" id="results"></tbody>
           </table>
         </div>
       </div>
@@ -407,8 +411,22 @@ export default {
 };
 </script>
 
-<style >
+<style scoped >
 #map {
   height: 100vh;
 }
+.column-left {
+  float: left;
+  width: 70%;
+}
+.column-right {
+  float: right;
+  width: 30%;
+}
+#listing {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: visible
+}
+
 </style>
