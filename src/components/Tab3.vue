@@ -73,13 +73,14 @@
       <div class="column-right">
         <br /><br />
         <div id="listing">
-          <table id="resultsTable">
-            <tbody id="results">
+          <table>
+            <tbody>
               <tr
-                class="result"
+                class="results"
                 @click="selectedResult(index)"
                 v-for="(result, index) in placeResults"
                 :key="index"
+                v-bind:class="{ active: selectedResultIndex === index }"
               >
                 <td><img :src="result.icon" /></td>
                 <td>{{ result.name }}</td>
@@ -219,6 +220,7 @@ export default {
   },
   methods: {
     selectedResult: function (index) {
+      this.selectedResultIndex = index;
       window.google.maps.event.trigger(this.markers[index], "click");
     },
     placeTypeSelected: function () {
@@ -414,7 +416,13 @@ export default {
   overflow-y: auto;
   overflow-x: visible;
 }
-.result:nth-child(even) {
+.results:nth-child(even) {
   background-color: rgb(227, 246, 255);
+}
+.results:hover {
+  background: #e0e0e0;
+}
+.results.active {
+  background: #e0e0e0;
 }
 </style>
