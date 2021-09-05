@@ -72,9 +72,19 @@
       </div>
       <div class="column-right">
         <br /><br />
-        <div ref="listing" id="listing">
-          <table ref="resultsTable" id="resultsTable">
-            <tbody ref="results" id="results"></tbody>
+        <div id="listing">
+          <table id="resultsTable">
+            <tbody id="results">
+              <tr
+                class="result"
+                @click="selectedResult(index)"
+                v-for="(result, index) in placeResults"
+                :key="index"
+              >
+                <td><img :src="result.icon" /></td>
+                <td>{{ result.name }}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -104,6 +114,8 @@ export default {
     return {
       missingArea: false,
       missingLocations: false,
+      placeResults: [],
+      markers: [],
       selected: null,
       options: [
         { text: "Accounting", value: "accounting" },
@@ -206,6 +218,9 @@ export default {
     };
   },
   methods: {
+    selectedResult: function (index) {
+      window.google.maps.event.trigger(this.markers[index], "click");
+    },
     placeTypeSelected: function () {
       const places = new window.google.maps.places.PlacesService(this.map);
       const infoWindow = new window.google.maps.InfoWindow({
@@ -215,7 +230,6 @@ export default {
       const turf = window.turf;
       let intersection;
       let bbox;
-      let markers = [];
 
       if (this.area.type == "Polygon") {
         intersection = turf.polygon(this.area.coordinates);
@@ -237,24 +251,18 @@ export default {
           status === window.google.maps.places.PlacesServiceStatus.OK &&
           results
         ) {
-          const clearResults = this.$refs.results;
-
-          while (clearResults.childNodes[0]) {
-            clearResults.removeChild(clearResults.childNodes[0]);
-          }
-
-          for (let i = 0; i < markers.length; i++) {
-            if (markers[i]) {
-              markers[i].setMap(null);
+          this.placeResults = [];
+          for (let i = 0; i < this.markers.length; i++) {
+            if (this.markers[i]) {
+              this.markers[i].setMap(null);
             }
           }
-          markers = [];
-          let filteredResults = [];
+          this.markers = [];
+
           results.forEach((result) => {
             let resultLat = result.geometry.location.lat();
             let resultLng = result.geometry.location.lng();
             let location = turf.point([resultLng, resultLat]);
-            console.log(result);
             let intersectionAsLines = turf.polygonToLine(intersection);
             let locationDistanceFromIntersection = turf.nearestPointOnLine(
               intersectionAsLines,
@@ -263,30 +271,27 @@ export default {
                 units: "degrees",
               }
             ).properties.dist;
-            console.log(locationDistanceFromIntersection);
-            console.log(turf.booleanPointInPolygon(location, intersection));
             if (
               locationDistanceFromIntersection < 0.001 ||
               turf.booleanPointInPolygon(location, intersection)
             ) {
-              filteredResults.push(result);
+              this.placeResults.push(result);
             }
           });
-          console.log(results.length);
-          console.log(filteredResults.length);
-          for (let i = 0; i < filteredResults.length; i++) {
+
+          for (let i = 0; i < this.placeResults.length; i++) {
             // Use marker animation to drop the icons incrementally on the map.
-            markers[i] = new window.google.maps.Marker({
-              position: filteredResults[i].geometry.location,
+            this.markers[i] = new window.google.maps.Marker({
+              position: this.placeResults[i].geometry.location,
               animation: window.google.maps.Animation.DROP,
             });
             // If the user clicks a marker, show the details in an info window.
-            markers[i].placeResult = filteredResults[i];
+            this.markers[i].placeResult = this.placeResults[i];
             window.google.maps.event.addListener(
-              markers[i],
+              this.markers[i],
               "click",
               function () {
-                const marker = markers[i];
+                const marker = this.markers[i];
                 places.getDetails(
                   { placeId: marker.placeResult.place_id },
                   (place, status) => {
@@ -340,29 +345,10 @@ export default {
 
             setTimeout(
               function () {
-                markers[i].setMap(this.map);
+                this.markers[i].setMap(this.map);
               }.bind(this),
               i * 100
             );
-            const saveResults = this.$refs.results;
-            const tr = document.createElement("tr");
-            tr.style.backgroundColor = i % 2 === 0 ? "#F0F0F0" : "#FFFFFF";
-
-            tr.onclick = function () {
-              window.google.maps.event.trigger(markers[i], "click");
-            };
-            const iconTd = document.createElement("td");
-            const nameTd = document.createElement("td");
-            const icon = document.createElement("img");
-            icon.src = filteredResults[i].icon;
-            icon.setAttribute("class", "placeIcon");
-            icon.setAttribute("className", "placeIcon");
-            const name = document.createTextNode(filteredResults[i].name);
-            iconTd.appendChild(icon);
-            nameTd.appendChild(name);
-            tr.appendChild(iconTd);
-            tr.appendChild(nameTd);
-            saveResults.appendChild(tr);
           }
         }
       });
@@ -426,7 +412,9 @@ export default {
 #listing {
   height: 100vh;
   overflow-y: auto;
-  overflow-x: visible
+  overflow-x: visible;
 }
-
+.result:nth-child(even) {
+  background-color: rgb(227, 246, 255);
+}
 </style>
