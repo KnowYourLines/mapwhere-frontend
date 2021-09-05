@@ -310,6 +310,7 @@ export default {
           status === window.google.maps.places.PlacesServiceStatus.OK &&
           results
         ) {
+          this.selectedResultIndex = null;
           this.placeResults = [];
           for (let i = 0; i < this.markers.length; i++) {
             if (this.markers[i]) {
