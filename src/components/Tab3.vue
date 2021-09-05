@@ -232,14 +232,28 @@ export default {
     };
   },
   watch: {
-    placeResults: function (newResults) {
-      if (newResults.length > 0) {
-        console.log("found results");
-      } else {
-        console.log("no results");
+    area: function () {
+      if (!this.missingArea) {
+        this.map = new window.google.maps.Map(this.$refs.map, {
+          zoom: 15,
+          center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
+        });
+        const geoJson = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: this.area.type,
+                coordinates: this.area.coordinates,
+              },
+            },
+          ],
+        };
+        this.map.data.addGeoJson(geoJson);
       }
     },
-    area: function () {
+    markers: function () {
       if (!this.missingArea) {
         this.map = new window.google.maps.Map(this.$refs.map, {
           zoom: 15,
@@ -395,6 +409,18 @@ export default {
               i * 100
             );
           }
+        }
+        if (
+          status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS
+        ) {
+          this.placeResults = [];
+          for (let i = 0; i < this.markers.length; i++) {
+            if (this.markers[i]) {
+              this.markers[i].setMap(null);
+            }
+          }
+          this.markers = [];
+          alert("No places found!");
         }
       });
     },
