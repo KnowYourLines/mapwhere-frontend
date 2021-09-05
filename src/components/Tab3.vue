@@ -24,6 +24,12 @@
         </select>
       </div>
       <div id="map" ref="map"></div>
+      <div ref="listing" id="listing">
+        <table ref="resultsTable" id="resultsTable">
+          <tbody ref="results" id="results"></tbody>
+        </table>
+      </div>
+
       <div style="display: none">
         <div ref="infoContent" id="info-content">
           <table>
@@ -227,7 +233,12 @@ export default {
           status === window.google.maps.places.PlacesServiceStatus.OK &&
           results
         ) {
-          // clearResults();
+          const clearResults = this.$refs.results;
+
+          while (clearResults.childNodes[0]) {
+            clearResults.removeChild(results.childNodes[0]);
+          }
+
           for (let i = 0; i < markers.length; i++) {
             if (markers[i]) {
               markers[i].setMap(null);
@@ -329,7 +340,18 @@ export default {
               }.bind(this),
               i * 100
             );
-            // addResult(results[i], i);
+            const saveResults = this.$refs.results;
+            const tr = document.createElement("tr");
+            tr.style.backgroundColor = i % 2 === 0 ? "#F0F0F0" : "#FFFFFF";
+
+            tr.onclick = function () {
+              window.google.maps.event.trigger(markers[i], "click");
+            };
+            const nameTd = document.createElement("td");
+            const name = document.createTextNode(filteredResults[i].name);
+            nameTd.appendChild(name);
+            tr.appendChild(nameTd);
+            saveResults.appendChild(tr);
           }
         }
       });
