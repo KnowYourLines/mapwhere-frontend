@@ -25,27 +25,45 @@
       </div>
       <div id="map" ref="map"></div>
       <div style="display: none">
-        <div ref="info_content" id="info-content">
+        <div ref="infoContent" id="info-content">
           <table>
-            <tr ref="iw_url_row" id="iw-url-row" class="iw_table_row">
-              <td ref="iw_icon" id="iw-icon" class="iw_table_icon"></td>
-              <td ref="iw_url" id="iw-url"></td>
+            <tr ref="iwUrlRow" id="iw-url-row" class="iw_table_row">
+              <td ref="iwIcon" id="iw-icon" class="iw_table_icon">
+                <img ref="icon" />
+              </td>
+              <td ref="iwURL" id="iw-url">
+                <b
+                  ><a
+                    ref="mapsURL"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  ></a
+                ></b>
+              </td>
             </tr>
-            <tr ref="iw_address_row" id="iw-address-row" class="iw_table_row">
+            <tr ref="iwAddressRow" id="iw-address-row" class="iw_table_row">
               <td class="iw_attribute_name">Address:</td>
-              <td ref="iw_address" id="iw-address"></td>
+              <td ref="iwAddress" id="iw-address"></td>
             </tr>
-            <tr ref="iw_phone_row" id="iw-phone-row" class="iw_table_row">
+            <tr ref="iwPhoneRow" id="iw-phone-row" class="iw_table_row">
               <td class="iw_attribute_name">Telephone:</td>
-              <td ref="iw_phone" id="iw-phone"></td>
+              <td ref="iwPhone" id="iw-phone"></td>
             </tr>
-            <tr ref="iw_rating_row" id="iw-rating-row" class="iw_table_row">
+            <tr ref="iwRatingRow" id="iw-rating-row" class="iw_table_row">
               <td class="iw_attribute_name">Rating:</td>
-              <td ref="iw_rating" id="iw-rating"></td>
+              <td ref="iwRating" id="iw-rating"></td>
             </tr>
-            <tr ref="iw_website_row" id="iw-website-row" class="iw_table_row">
+            <tr ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
               <td class="iw_attribute_name">Website:</td>
-              <td ref="iw_website" id="iw-website"></td>
+              <td ref="iwWebsite" id="iw-website">
+                <b
+                  ><a
+                    ref="websiteURL"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  ></a
+                ></b>
+              </td>
             </tr>
           </table>
         </div>
@@ -181,7 +199,7 @@ export default {
     placeTypeSelected: function () {
       const places = new window.google.maps.places.PlacesService(this.map);
       const infoWindow = new window.google.maps.InfoWindow({
-        content: this.$refs.info_content,
+        content: this.$refs.infoContent,
       });
 
       const turf = window.turf;
@@ -264,22 +282,17 @@ export default {
                       return;
                     }
                     infoWindow.open(this.map, marker);
-                    this.$refs.iw_icon.innerHTML =
-                      '<img src="' + place.icon + '"/>';
-                    this.$refs.iw_url.innerHTML =
-                      '<b><a href="' +
-                      place.url +
-                      '" target="_blank" rel="noopener noreferrer">' +
-                      place.name +
-                      "</a></b>";
-                    this.$refs.iw_address.textContent = place.vicinity;
+                    this.$refs.icon.src = place.icon;
+                    this.$refs.mapsURL.href = place.url;
+                    this.$refs.mapsURL.textContent = place.name;
+                    this.$refs.iwAddress.textContent = place.vicinity;
 
                     if (place.formatted_phone_number) {
-                      this.$refs.iw_phone_row.style.display = "";
-                      this.$refs.iw_phone.textContent =
+                      this.$refs.iwPhoneRow.style.display = "";
+                      this.$refs.iwPhone.textContent =
                         place.formatted_phone_number;
                     } else {
-                      this.$refs.iw_phone_row.style.display = "none";
+                      this.$refs.iwPhoneRow.style.display = "none";
                     }
 
                     if (place.rating) {
@@ -291,23 +304,19 @@ export default {
                         } else {
                           ratingHtml += "&#10029;";
                         }
-                        this.$refs.iw_rating_row.style.display = "";
-                        this.$refs.iw_rating.innerHTML = ratingHtml;
+                        this.$refs.iwRatingRow.style.display = "";
+                        this.$refs.iwRating.innerHTML = ratingHtml;
                       }
                     } else {
-                      this.$refs.iw_rating_row.style.display = "none";
+                      this.$refs.iwRatingRow.style.display = "none";
                     }
 
                     if (place.website) {
-                      this.$refs.iw_website_row.style.display = "";
-                      this.$refs.iw_website.innerHTML =
-                        '<b><a href="' +
-                        place.website +
-                        '" target="_blank" rel="noopener noreferrer">' +
-                        place.website +
-                        "</a></b>";
+                      this.$refs.iwWebsiteRow.style.display = "";
+                      this.$refs.websiteURL.href = place.website;
+                      this.$refs.websiteURL.textContent = place.website;
                     } else {
-                      this.$refs.iw_website_row.style.display = "none";
+                      this.$refs.iwWebsiteRow.style.display = "none";
                     }
                   }
                 );
