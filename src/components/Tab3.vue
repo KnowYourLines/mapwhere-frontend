@@ -216,15 +216,39 @@ export default {
             }
           }
           markers = [];
-
-          for (let i = 0; i < results.length; i++) {
+          let filteredResults = [];
+          results.forEach((result) => {
+            let resultLat = result.geometry.location.lat();
+            let resultLng = result.geometry.location.lng();
+            let location = turf.point([resultLng, resultLat]);
+            console.log(result);
+            let intersectionAsLines = turf.polygonToLine(intersection);
+            let locationDistanceFromIntersection = turf.nearestPointOnLine(
+              intersectionAsLines,
+              location,
+              {
+                units: "degrees",
+              }
+            ).properties.dist;
+            console.log(locationDistanceFromIntersection);
+            console.log(turf.booleanPointInPolygon(location, intersection));
+            if (
+              locationDistanceFromIntersection < 0.001 ||
+              turf.booleanPointInPolygon(location, intersection)
+            ) {
+              filteredResults.push(result);
+            }
+          });
+          console.log(results.length);
+          console.log(filteredResults.length);
+          for (let i = 0; i < filteredResults.length; i++) {
             // Use marker animation to drop the icons incrementally on the map.
             markers[i] = new window.google.maps.Marker({
-              position: results[i].geometry.location,
+              position: filteredResults[i].geometry.location,
               animation: window.google.maps.Animation.DROP,
             });
             // If the user clicks a marker, show the details in an info window.
-            markers[i].placeResult = results[i];
+            markers[i].placeResult = filteredResults[i];
             window.google.maps.event.addListener(
               markers[i],
               "click",
