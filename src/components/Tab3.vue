@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="column">
     <div v-if="missingLocations">
       <ul id="array-rendering">
         <span>Missing user locations for:</span>
@@ -84,7 +84,7 @@
         ]"
       >
         <br /><br />
-        <div id="listing">
+        <div v-if="placeResults.length" id="listing">
           <table>
             <tbody>
               <tr
@@ -464,5 +464,12 @@ export default {
 }
 .results.active {
   background: #e0e0e0;
+}
+@media (orientation: portrait) {
+  .column {
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 1em;
+  }
 }
 </style>
