@@ -19,6 +19,7 @@
     @new-isochrones="newIsochrones"
     @highlight-area="highlightArea"
     @highlight-chat="highlightChat"
+    @highlight-vote="highlightVote"
     @place-type="placeTypeFound"
     @new-places="newPlacesFound"
   />
@@ -83,6 +84,13 @@ export default {
   methods: {
     newPlacesFound: function (newPlaces) {
       this.places = newPlaces;
+      if (this.$refs.chat.$refs.component) {
+        if (this.$refs.chat.currentTabComponent != "Tab4") {
+          this.$refs.chat.$refs.tab4.style.backgroundColor = "#5dbeff";
+        }
+      }
+    },
+    highlightVote: function () {
       if (this.$refs.chat.$refs.component) {
         if (this.$refs.chat.currentTabComponent != "Tab4") {
           this.$refs.chat.$refs.tab4.style.backgroundColor = "#5dbeff";

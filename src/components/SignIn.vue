@@ -44,6 +44,7 @@ export default {
     "new-isochrones",
     "highlight-chat",
     "highlight-area",
+    "highlight-vote",
     "place-type",
     "new-places",
   ],
@@ -307,6 +308,8 @@ export default {
               );
             } else if ("highlight_chat" in data) {
               this.$emit("highlight-chat");
+            } else if ("highlight_vote" in data) {
+              this.$emit("highlight-vote");
             } else if ("highlight_area" in data) {
               this.$emit("highlight-area");
             } else if ("place_type" in data) {
