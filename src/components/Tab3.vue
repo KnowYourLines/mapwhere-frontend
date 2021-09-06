@@ -240,6 +240,16 @@ export default {
   },
   watch: {
     area: function () {
+      if (
+        this.area.type &&
+        this.area.coordinates &&
+        this.area.centroid_lat &&
+        this.area.centroid_lng
+      ) {
+        this.missingArea = false;
+      } else {
+        this.missingArea = true;
+      }
       if (!this.missingArea) {
         this.map = new window.google.maps.Map(this.$refs.map, {
           zoom: 15,
@@ -258,12 +268,22 @@ export default {
           ],
         };
         this.map.data.addGeoJson(geoJson);
-      }
-      if (this.selected) {
-        this.placeTypeSelected();
+        if (this.selected) {
+          this.placeTypeSelected();
+        }
       }
     },
     markers: function () {
+      if (
+        this.area.type &&
+        this.area.coordinates &&
+        this.area.centroid_lat &&
+        this.area.centroid_lng
+      ) {
+        this.missingArea = false;
+      } else {
+        this.missingArea = true;
+      }
       if (!this.missingArea) {
         this.map = new window.google.maps.Map(this.$refs.map, {
           zoom: 15,
