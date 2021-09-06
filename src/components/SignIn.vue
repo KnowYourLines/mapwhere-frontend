@@ -44,6 +44,7 @@ export default {
     "new-isochrones",
     "highlight-chat",
     "highlight-area",
+    "place-type",
   ],
   data() {
     return {
@@ -142,6 +143,11 @@ export default {
             this.socketRef.send(
               JSON.stringify({
                 command: "fetch_location_bubble",
+              })
+            );
+            this.socketRef.send(
+              JSON.stringify({
+                command: "fetch_place_type",
               })
             );
           };
@@ -306,6 +312,12 @@ export default {
               this.$emit("highlight-chat");
             } else if ("highlight_area" in data) {
               this.$emit("highlight-area");
+            } else if ("place_type" in data) {
+              this.$emit("place-type", data.place_type);
+            } else if ("refresh_place_type" in data) {
+              this.socketRef.send(
+                JSON.stringify({ command: "fetch_place_type" })
+              );
             } else {
               this.$emit("new-message", data.message + "\n");
             }

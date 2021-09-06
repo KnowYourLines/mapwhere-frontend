@@ -19,6 +19,7 @@
     @new-isochrones="newIsochrones"
     @highlight-area="highlightArea"
     @highlight-chat="highlightChat"
+    @place-type="placeTypeFound"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -40,6 +41,7 @@
     :isochroneRegion="isochroneRegion"
     :area="area"
     :usersMissingLocations="usersMissingLocations"
+    :placeType="placeType"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"
@@ -73,9 +75,13 @@ export default {
       isochroneRegion: "",
       area: {},
       usersMissingLocations: [],
+      placeType: null,
     };
   },
   methods: {
+    placeTypeFound: function (choice) {
+      this.placeType = choice;
+    },
     newIsochrones: function (isochrones) {
       const turf = window.turf;
       let intersection = isochrones[0];

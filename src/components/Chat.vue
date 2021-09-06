@@ -71,6 +71,7 @@
         :area="area"
         :usersMissingLocations="usersMissingLocations"
         :user="user"
+        :placeType="placeType"
       ></component>
       <br />
     </div>
@@ -156,6 +157,10 @@ export default {
       required: true,
     },
     isochroneRegion: {
+      type: String,
+      required: false,
+    },
+    placeType: {
       type: String,
       required: false,
     },

@@ -125,6 +125,10 @@ export default {
       type: Array,
       required: true,
     },
+    placeType: {
+      type: String,
+      required: false,
+    },
   },
   data() {
     return {
@@ -133,7 +137,7 @@ export default {
       placeResults: [],
       selectedResultIndex: null,
       markers: [],
-      selected: null,
+      selected: this.placeType,
       options: [
         { text: "Accounting", value: "accounting" },
         { text: "Airport", value: "airport" },
@@ -296,6 +300,9 @@ export default {
       window.google.maps.event.trigger(this.markers[index], "click");
     },
     placeTypeSelected: function () {
+      this.socketRef.send(
+        JSON.stringify({ command: "update_place_type", choice: this.selected })
+      );
       const places = new window.google.maps.places.PlacesService(this.map);
       const infoWindow = new window.google.maps.InfoWindow({
         content: this.$refs.infoContent,
