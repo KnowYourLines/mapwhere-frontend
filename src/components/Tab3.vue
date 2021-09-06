@@ -311,9 +311,14 @@ export default {
       let placeId = placeToSave.place_id;
       let placeLng = placeToSave.geometry.location.lng();
       let placeLat = placeToSave.geometry.location.lat();
-      console.log(placeId);
-      console.log(placeLat);
-      console.log(placeLng);
+      this.socketRef.send(
+        JSON.stringify({
+          command: "save_place",
+          lat: placeLat,
+          lng: placeLng,
+          id: placeId,
+        })
+      );
     },
     selectedResult: function (index) {
       this.selectedResultIndex = index;
@@ -394,6 +399,7 @@ export default {
               "click",
               function () {
                 const marker = this.markers[i];
+                this.selectedResultIndex = i;
                 places.getDetails(
                   { placeId: marker.placeResult.place_id },
                   (place, status) => {

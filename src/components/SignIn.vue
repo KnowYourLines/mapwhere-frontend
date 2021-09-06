@@ -281,17 +281,14 @@ export default {
                 JSON.stringify({ command: "calculate_intersection" })
               );
             } else if ("area" in data) {
-              console.log(data.area);
               this.$emit("new-area", data.area);
             } else if ("isochrones" in data) {
-              console.log(data.isochrones);
               this.$emit("new-isochrones", data.isochrones);
             } else if ("refresh_users_missing_locations" in data) {
               this.socketRef.send(
                 JSON.stringify({ command: "fetch_users_missing_locations" })
               );
             } else if ("users_missing_locations" in data) {
-              console.log(data.users_missing_locations);
               this.$emit(
                 "users-missing-locations",
                 data.users_missing_locations
@@ -308,7 +305,6 @@ export default {
                 data.location_lat
               );
             } else if ("highlight_chat" in data) {
-              console.log("highlight_chat");
               this.$emit("highlight-chat");
             } else if ("highlight_area" in data) {
               this.$emit("highlight-area");
@@ -318,6 +314,10 @@ export default {
               this.socketRef.send(
                 JSON.stringify({ command: "fetch_place_type" })
               );
+            } else if ("refresh_places" in data) {
+              this.socketRef.send(JSON.stringify({ command: "fetch_places" }));
+            } else if ("places" in data) {
+              console.log(data.places);
             } else {
               this.$emit("new-message", data.message + "\n");
             }
