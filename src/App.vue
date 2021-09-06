@@ -20,6 +20,7 @@
     @highlight-area="highlightArea"
     @highlight-chat="highlightChat"
     @place-type="placeTypeFound"
+    @new-places="newPlacesFound"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -76,9 +77,18 @@ export default {
       area: {},
       usersMissingLocations: [],
       placeType: null,
+      places: [],
     };
   },
   methods: {
+    newPlacesFound: function (newPlaces) {
+      this.places = newPlaces;
+      if (this.$refs.chat.$refs.component) {
+        if (this.$refs.chat.currentTabComponent != "Tab4") {
+          this.$refs.chat.$refs.tab4.style.backgroundColor = "#5dbeff";
+        }
+      }
+    },
     placeTypeFound: function (choice) {
       this.placeType = choice;
     },

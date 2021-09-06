@@ -45,6 +45,7 @@ export default {
     "highlight-chat",
     "highlight-area",
     "place-type",
+    "new-places",
   ],
   data() {
     return {
@@ -318,6 +319,7 @@ export default {
               this.socketRef.send(JSON.stringify({ command: "fetch_places" }));
             } else if ("places" in data) {
               console.log(data.places);
+              this.$emit("new-places", data.places);
             } else {
               this.$emit("new-message", data.message + "\n");
             }

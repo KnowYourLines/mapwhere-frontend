@@ -56,8 +56,9 @@
       </button>
       <button
         class="tab-button"
+        ref="tab4"
         v-bind:class="{ active: currentTabComponent === 'Tab4' }"
-        @click="currentTabComponent = 'Tab4'"
+        @click="voteSelected"
       >
         Vote
       </button>
@@ -181,6 +182,11 @@ export default {
       this.socketRef.send(JSON.stringify({ command: "fetch_intersection" }));
       this.currentTabComponent = "Tab3";
       this.$refs.tab3.style.backgroundColor = null;
+    },
+    voteSelected: function () {
+      this.socketRef.send(JSON.stringify({ command: "fetch_places" }));
+      this.currentTabComponent = "Tab4";
+      this.$refs.tab4.style.backgroundColor = null;
     },
     updateDisplayName: function () {
       this.socketRef.send(
