@@ -129,6 +129,7 @@ export default {
       hoursToTravel: 0,
       minutesToTravel: 0,
       flagMissingOwnLocation: false,
+      placeId: null,
     };
   },
   watch: {
@@ -182,6 +183,7 @@ export default {
             hours: this.hoursToTravel,
             minutes: this.minutesToTravel,
             region: this.isochroneServiceRegion,
+            place_id: this.placeId,
           })
         );
       }
@@ -189,6 +191,7 @@ export default {
     selectLocation: function (place) {
       this.lat = place.geometry.location.lat();
       this.lng = place.geometry.location.lng();
+      this.placeId = place.place_id;
       this.yourLocation = place.name + ", " + place.formatted_address;
       this.possiblePlaces = null;
       this.socketRef.send(
@@ -213,6 +216,7 @@ export default {
               const foundLocation = response.results[0];
               this.yourLocation = foundLocation.formatted_address;
               this.lat = foundLocation.geometry.location.lat();
+              this.placeId = foundLocation.place_id;
               this.lng = foundLocation.geometry.location.lng();
               this.possiblePlaces = null;
               this.socketRef.send(
@@ -256,6 +260,7 @@ export default {
 
         this.lng = places[0].geometry.location.lng();
         this.lat = places[0].geometry.location.lat();
+        this.placeId = places[0].place_id;
         if (places[0].formatted_address.includes(places[0].name)) {
           this.yourLocation = places[0].formatted_address;
         } else {
@@ -295,6 +300,7 @@ export default {
     ) {
       this.yourLocation = this.locationBubble.address;
       this.lat = this.locationBubble.latitude;
+      this.placeId = this.locationBubble.place_id;
       this.lng = this.locationBubble.longitude;
       this.travelMode = this.locationBubble.transportation;
       this.hoursToTravel = this.locationBubble.hours;
