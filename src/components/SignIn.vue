@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <div class="column">
-      <section v-if="showSignIn" id="firebaseui-auth-container"></section>
-      <div class="column-center">
-        <button v-if="shareable" @click="share">Share</button>
+  <div class="component">
+    <section v-if="showSignIn" id="firebaseui-auth-container"></section>
+    <div v-if="shareable">
+      <div class="column-left">
+        <button @click="share">Share</button>
       </div>
       <div class="column-right">
         <button @click="signOut">Sign Out</button>
       </div>
-      <div class="column-left">
-        <button @click="createNewRoom">New room</button>
+    </div>
+    <div v-else>
+      <div>
+        <button @click="signOut">Sign Out</button>
       </div>
     </div>
-
-    <br /><br />
   </div>
 </template>
 
@@ -75,9 +75,6 @@ export default {
         url: window.location.href,
       };
       navigator.share(shareData);
-    },
-    createNewRoom: function () {
-      window.location.href = window.location.href.split("?")[0];
     },
   },
   mounted() {
@@ -385,43 +382,17 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 @media (orientation: landscape) {
-  .column {
-    display: inline-block;
-    width: 33.333%;
-  }
   .column-left {
     float: left;
-    width: 33.333%;
+    width: 50%;
   }
   .column-right {
     float: right;
-    width: 33.333%;
-  }
-  .column-center {
-    display: inline-block;
-    width: 33.333%;
+    width: 50%;
   }
 }
 @media (orientation: portrait) {
-  .column {
-    display: inline-block;
-    width: 100%;
-  }
   .column-left {
     width: 100%;
   }
@@ -429,9 +400,9 @@ a {
     width: 100%;
     padding-bottom: 1em;
   }
-  .column-center {
-    width: 100%;
-    padding-bottom: 1em;
+
+  .component {
+    background-color: rgb(227, 246, 255);
   }
 }
 </style>
