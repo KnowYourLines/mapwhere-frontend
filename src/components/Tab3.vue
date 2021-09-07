@@ -261,7 +261,7 @@ export default {
         }
       }
     },
-    markers: function (newMarkers) {
+    markers: function () {
       if (
         this.area.type &&
         this.area.coordinates &&
@@ -290,9 +290,6 @@ export default {
           ],
         };
         this.map.data.addGeoJson(geoJson);
-      }
-      if (newMarkers.length > 0) {
-        this.$refs.map.scrollIntoView(true);
       }
     },
   },
@@ -349,20 +346,19 @@ export default {
         bounds: new window.google.maps.LatLngBounds(sw, ne),
         types: [this.selected],
       };
-      places.nearbySearch(search, (results, status) => {
+      this.selectedResultIndex = null;
+      this.placeResults = [];
+      for (let i = 0; i < this.markers.length; i++) {
+        if (this.markers[i]) {
+          this.markers[i].setMap(null);
+        }
+      }
+      this.markers = [];
+      places.nearbySearch(search, (results, status, pagination) => {
         if (
           status === window.google.maps.places.PlacesServiceStatus.OK &&
           results
         ) {
-          this.selectedResultIndex = null;
-          this.placeResults = [];
-          for (let i = 0; i < this.markers.length; i++) {
-            if (this.markers[i]) {
-              this.markers[i].setMap(null);
-            }
-          }
-          this.markers = [];
-
           results.forEach((result) => {
             let resultLat = result.geometry.location.lat();
             let resultLng = result.geometry.location.lng();
@@ -448,14 +444,20 @@ export default {
                 );
               }.bind(this)
             );
-
-            setTimeout(
-              function () {
-                this.markers[i].setMap(this.map);
-              }.bind(this),
-              i * 100
-            );
+            if (!(pagination && pagination.hasNextPage)) {
+              setTimeout(
+                function () {
+                  this.markers[i].setMap(this.map);
+                }.bind(this),
+                i
+              );
+            }
           }
+          this.$refs.map.scrollIntoView(true);
+        }
+
+        if (pagination && pagination.hasNextPage) {
+          pagination.nextPage();
         }
         if (
           status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS
@@ -494,11 +496,11 @@ export default {
 
 <style scoped >
 #map {
-  height: 50vh;
+  height: 80vh;
 }
 
 #listing {
-  height: 50vh;
+  height: 30vh;
   overflow-y: auto;
   overflow-x: visible;
 }
