@@ -239,25 +239,56 @@ export default {
         this.missingArea = true;
       }
       if (!this.missingArea) {
-        this.map = new window.google.maps.Map(this.$refs.map, {
-          zoom: 15,
-          center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
-        });
-        const geoJson = {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              geometry: {
-                type: this.area.type,
-                coordinates: this.area.coordinates,
+        if (!this.$refs.map) {
+          this.$nextTick(() => {
+            this.map = new window.google.maps.Map(this.$refs.map, {
+              zoom: 14,
+              center: {
+                lat: this.area.centroid_lat,
+                lng: this.area.centroid_lng,
               },
+            });
+            const geoJson = {
+              type: "FeatureCollection",
+              features: [
+                {
+                  type: "Feature",
+                  geometry: {
+                    type: this.area.type,
+                    coordinates: this.area.coordinates,
+                  },
+                },
+              ],
+            };
+            this.map.data.addGeoJson(geoJson);
+            if (this.selected) {
+              this.placeTypeSelected();
+            }
+          });
+        } else {
+          this.map = new window.google.maps.Map(this.$refs.map, {
+            zoom: 14,
+            center: {
+              lat: this.area.centroid_lat,
+              lng: this.area.centroid_lng,
             },
-          ],
-        };
-        this.map.data.addGeoJson(geoJson);
-        if (this.selected) {
-          this.placeTypeSelected();
+          });
+          const geoJson = {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                geometry: {
+                  type: this.area.type,
+                  coordinates: this.area.coordinates,
+                },
+              },
+            ],
+          };
+          this.map.data.addGeoJson(geoJson);
+          if (this.selected) {
+            this.placeTypeSelected();
+          }
         }
       }
     },
@@ -274,7 +305,7 @@ export default {
       }
       if (!this.missingArea) {
         this.map = new window.google.maps.Map(this.$refs.map, {
-          zoom: 15,
+          zoom: 14,
           center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
         });
         const geoJson = {
@@ -341,7 +372,6 @@ export default {
       }
       const sw = { lat: bbox[1], lng: bbox[0] };
       const ne = { lat: bbox[3], lng: bbox[2] };
-
       const search = {
         bounds: new window.google.maps.LatLngBounds(sw, ne),
         types: [this.selected],
@@ -371,6 +401,7 @@ export default {
                 units: "degrees",
               }
             ).properties.dist;
+
             if (
               locationDistanceFromIntersection < 0.001 ||
               turf.booleanPointInPolygon(location, intersection)
