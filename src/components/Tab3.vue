@@ -261,7 +261,7 @@ export default {
         }
       }
     },
-    markers: function () {
+    markers: function (newMarkers) {
       if (
         this.area.type &&
         this.area.coordinates &&
@@ -290,6 +290,9 @@ export default {
           ],
         };
         this.map.data.addGeoJson(geoJson);
+      }
+      if (newMarkers.length > 0) {
+        this.$refs.map.scrollIntoView(true);
       }
     },
   },
