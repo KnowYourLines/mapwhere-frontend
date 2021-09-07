@@ -16,7 +16,7 @@
         </div>
       </div>
     </div>
-    <br /><br />
+    <br />
   </div>
 </template>
 
@@ -393,10 +393,12 @@ export default {
   .column-left {
     float: left;
     width: 50%;
+    padding-bottom: 1em;
   }
   .column-right {
     float: right;
     width: 50%;
+    padding-bottom: 1em;
   }
 }
 @media (orientation: portrait) {
@@ -406,6 +408,7 @@ export default {
   }
   .column-left {
     width: 100%;
+    padding-bottom: 1em;
   }
   .column-right {
     width: 100%;
