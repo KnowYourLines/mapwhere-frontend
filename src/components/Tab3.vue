@@ -332,7 +332,13 @@ export default {
       const infoWindow = new window.google.maps.InfoWindow({
         content: this.$refs.infoContent,
       });
-
+      window.google.maps.event.addListener(
+        infoWindow,
+        "closeclick",
+        function () {
+          this.selectedResultIndex = null;
+        }.bind(this)
+      );
       const turf = window.turf;
       let intersection;
       let bbox;
@@ -410,6 +416,7 @@ export default {
                       return;
                     }
                     infoWindow.open(this.map, marker);
+
                     this.$refs.icon.src = place.icon;
                     this.$refs.mapsURL.href = place.url;
                     this.$refs.mapsURL.textContent = place.name;
