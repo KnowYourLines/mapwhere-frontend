@@ -23,7 +23,13 @@
           </option>
         </select>
       </div>
-      <div>
+      <div
+        :style="[
+          placeResults.length > 0
+            ? { float: 'left', width: '70%' }
+            : { float: 'left', width: '100%' },
+        ]"
+      >
         <div id="map" ref="map"></div>
         <div style="display: none">
           <div ref="infoContent" id="info-content">
@@ -74,9 +80,15 @@
           </div>
         </div>
       </div>
-      <div>
+      <div
+        :style="[
+          placeResults.length > 0
+            ? { float: 'right', width: '30%' }
+            : { float: 'right', width: '0%' },
+        ]"
+      >
         <div v-if="placeResults.length" id="listing">
-          <table class="listing-table">
+          <table>
             <tbody>
               <tr
                 class="results"
@@ -491,17 +503,13 @@ export default {
 
 <style scoped >
 #map {
-  height: 50vh;
+  height: 100vh;
 }
 
 #listing {
-  height: 50vh;
+  height: 100vh;
   overflow-y: auto;
   overflow-x: visible;
-}
-.listing-table {
-  display: table;
-  width: 100%;
 }
 .results:nth-child(even) {
   background-color: rgb(227, 246, 255);
