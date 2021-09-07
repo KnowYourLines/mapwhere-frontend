@@ -4,10 +4,10 @@
       <section v-if="showSignIn" id="firebaseui-auth-container"></section>
       <div v-if="shareable">
         <div class="column-left">
-          <button @click="share">Share</button>
+          <button @click="signOut">Sign Out</button>
         </div>
         <div class="column-right">
-          <button @click="signOut">Sign Out</button>
+          <button @click="share">Share</button>
         </div>
       </div>
       <div v-else>
