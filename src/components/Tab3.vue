@@ -88,11 +88,11 @@
                 <td><img :src="result.icon" /></td>
                 <td>{{ result.name }}</td>
               </tr>
-              <button v-if="moreResults" @click="findMoreResults">
-                Find more
-              </button>
             </tbody>
           </table>
+          <button class="load-more" v-if="moreResults" @click="findMoreResults">
+            Load more
+          </button>
         </div>
       </div>
     </div>
@@ -548,6 +548,10 @@ export default {
 }
 .listing-table {
   display: table;
+  width: 100%;
+}
+
+.load-more {
   width: 100%;
 }
 .results:nth-child(odd) {
