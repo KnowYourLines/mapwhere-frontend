@@ -1,83 +1,59 @@
 <template>
-  <div class="column-center">
-    <div>
-      <SignIn
-        @new-user="newUser"
-        @socket-created="socketCreated"
-        @new-room-members="newRoomMembers"
-        @new-notifications="newNotifications"
-        @new-join-requests="newJoinRequests"
-        @new-allowed-status="newAllowedStatus"
-        @new-room-name="newRoomName"
-        @clear-chat="clearChat"
-        @new-username="newUsername"
-        @new-message="newMessage"
-        @fetching-message="fetchingMessage"
-        @new-privacy="newPrivacy"
-        @found-location-bubble="foundLocationBubble"
-        @isochrone-regions="findIsochroneRegion"
-        @new-area="newArea"
-        @users-missing-locations="newUsersMissingLocations"
-        @new-isochrones="newIsochrones"
-        @highlight-area="highlightArea"
-        @highlight-chat="highlightChat"
-        @highlight-vote="highlightVote"
-        @place-type="placeTypeFound"
-        @new-places="newPlacesFound"
-      />
-
-      <br /><br />
-    </div>
-    <div>
-      <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
-        <template v-slot:label="{ checked, classList }">
-          <span :class="classList.label">{{
-            checked ? "Private" : "Public"
-          }}</span>
-        </template>
-      </Toggle>
-      <br /><br />
-      <Chat
-        ref="chat"
-        :socketRef="socket"
-        :user="user"
-        :roomMembers="roomMembers"
-        :joinRequests="joinRequests"
-        :notifications="notifications"
-        :privateRoom="privateRoom"
-        :userAllowed="userAllowed"
-        :locationBubble="locationBubble"
-        :isochroneRegion="isochroneRegion"
-        :area="area"
-        :usersMissingLocations="usersMissingLocations"
-        :placeType="placeType"
-        v-model:username.lazy.trim="username"
-        v-model:roomName.lazy.trim="roomName"
-        @new-join-requests="newJoinRequests"
-      />
-    </div>
-  </div>
-  <div v-if="userAllowed" class="column-right">
-    <br />
-    <ChatMembers
-      :roomMembers="roomMembers"
-      :privateRoom="privateRoom"
-      :joinRequests="joinRequests"
-      :socketRef="socket"
-    />
-  </div>
-  <div v-if="userAllowed" class="column-left">
-    <br />
-    <ChatHistory :notifications="notifications" :socketRef="socket" />
-  </div>
+  <SignIn
+    @new-user="newUser"
+    @socket-created="socketCreated"
+    @new-room-members="newRoomMembers"
+    @new-notifications="newNotifications"
+    @new-join-requests="newJoinRequests"
+    @new-allowed-status="newAllowedStatus"
+    @new-room-name="newRoomName"
+    @clear-chat="clearChat"
+    @new-username="newUsername"
+    @new-message="newMessage"
+    @fetching-message="fetchingMessage"
+    @new-privacy="newPrivacy"
+    @found-location-bubble="foundLocationBubble"
+    @isochrone-regions="findIsochroneRegion"
+    @new-area="newArea"
+    @users-missing-locations="newUsersMissingLocations"
+    @new-isochrones="newIsochrones"
+    @highlight-area="highlightArea"
+    @highlight-chat="highlightChat"
+    @highlight-vote="highlightVote"
+    @place-type="placeTypeFound"
+    @new-places="newPlacesFound"
+  />
+  <br /><br />
+  <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
+    <template v-slot:label="{ checked, classList }">
+      <span :class="classList.label">{{ checked ? "Private" : "Public" }}</span>
+    </template>
+  </Toggle>
+  <br /><br />
+  <Chat
+    ref="chat"
+    :socketRef="socket"
+    :user="user"
+    :roomMembers="roomMembers"
+    :joinRequests="joinRequests"
+    :notifications="notifications"
+    :privateRoom="privateRoom"
+    :userAllowed="userAllowed"
+    :locationBubble="locationBubble"
+    :isochroneRegion="isochroneRegion"
+    :area="area"
+    :usersMissingLocations="usersMissingLocations"
+    :placeType="placeType"
+    v-model:username.lazy.trim="username"
+    v-model:roomName.lazy.trim="roomName"
+    @new-join-requests="newJoinRequests"
+  />
 </template>
 
 <script>
 import Toggle from "@vueform/toggle";
 import Chat from "./components/Chat.vue";
 import SignIn from "./components/SignIn.vue";
-import ChatMembers from "./components/ChatMembers.vue";
-import ChatHistory from "./components/ChatHistory.vue";
 
 export default {
   name: "App",
@@ -85,8 +61,6 @@ export default {
     Toggle,
     Chat,
     SignIn,
-    ChatMembers,
-    ChatHistory,
   },
   data() {
     return {
@@ -316,39 +290,13 @@ export default {
 </script>
 
 <style>
-@media (orientation: landscape) {
-  .column-left {
-    float: left;
-    width: 30%;
-  }
-  .column-right {
-    float: right;
-    width: 30%;
-  }
-  .column-center {
-    display: inline-block;
-    width: 40%;
-  }
-}
-
-@media (orientation: portrait) {
-  .column-left {
-    width: 100%;
-  }
-  .column-right {
-    width: 100%;
-    background-color: rgb(227, 246, 255);
-  }
-  .column-center {
-    width: 100%;
-  }
-}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin-top: 60px;
 }
 .toggle-container {
   display: inline-block;

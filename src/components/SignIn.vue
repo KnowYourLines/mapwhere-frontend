@@ -1,19 +1,22 @@
 <template>
-  <div class="component">
-    <section v-if="showSignIn" id="firebaseui-auth-container"></section>
-    <div v-if="shareable">
-      <div class="column-left">
-        <button @click="share">Share</button>
+  <div>
+    <div class="column">
+      <section v-if="showSignIn" id="firebaseui-auth-container"></section>
+      <div v-if="shareable">
+        <div class="column-left">
+          <button @click="share">Share</button>
+        </div>
+        <div class="column-right">
+          <button @click="signOut">Sign Out</button>
+        </div>
       </div>
-      <div class="column-right">
-        <button @click="signOut">Sign Out</button>
+      <div v-else>
+        <div>
+          <button @click="signOut">Sign Out</button>
+        </div>
       </div>
     </div>
-    <div v-else>
-      <div>
-        <button @click="signOut">Sign Out</button>
-      </div>
-    </div>
+    <br /><br />
   </div>
 </template>
 
@@ -383,6 +386,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @media (orientation: landscape) {
+  .column {
+    display: inline-block;
+    width: 33.333%;
+  }
   .column-left {
     float: left;
     width: 50%;
@@ -393,6 +400,10 @@ export default {
   }
 }
 @media (orientation: portrait) {
+  .column {
+    display: inline-block;
+    width: 100%;
+  }
   .column-left {
     width: 100%;
   }
