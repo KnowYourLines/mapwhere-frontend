@@ -503,7 +503,7 @@ export default {
   display: table;
   width: 100%;
 }
-.results:nth-child(even) {
+.results:nth-child(odd) {
   background-color: rgb(227, 246, 255);
 }
 .results:hover {
