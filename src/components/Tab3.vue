@@ -74,7 +74,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div ref="listing">
         <div v-if="placeResults.length" id="listing">
           <table class="listing-table">
             <tbody>
@@ -493,7 +493,11 @@ export default {
               i
             );
           }
-          this.$refs.map.scrollIntoView(true);
+          this.$refs.listing.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "end",
+          });
         }
 
         if (this.moreResults) {
