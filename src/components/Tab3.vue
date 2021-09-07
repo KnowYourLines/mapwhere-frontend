@@ -88,6 +88,9 @@
                 <td><img :src="result.icon" /></td>
                 <td>{{ result.name }}</td>
               </tr>
+              <button v-if="moreResults" @click="findMoreResults">
+                Find more
+              </button>
             </tbody>
           </table>
         </div>
@@ -325,6 +328,12 @@ export default {
     },
   },
   methods: {
+    findMoreResults: function () {
+      this.moreResults = false;
+      if (this.getNextPage) {
+        this.getNextPage();
+      }
+    },
     savePlace: function () {
       let placeToSave = this.placeResults[this.selectedResultIndex];
       let placeId = placeToSave.place_id;
@@ -385,6 +394,8 @@ export default {
       }
       this.markers = [];
       places.nearbySearch(search, (results, status, pagination) => {
+        this.moreResults = pagination && pagination.hasNextPage;
+
         if (
           status === window.google.maps.places.PlacesServiceStatus.OK &&
           results
@@ -475,20 +486,20 @@ export default {
                 );
               }.bind(this)
             );
-            if (!(pagination && pagination.hasNextPage)) {
-              setTimeout(
-                function () {
-                  this.markers[i].setMap(this.map);
-                }.bind(this),
-                i
-              );
-            }
+            setTimeout(
+              function () {
+                this.markers[i].setMap(this.map);
+              }.bind(this),
+              i
+            );
           }
           this.$refs.map.scrollIntoView(true);
         }
 
-        if (pagination && pagination.hasNextPage) {
-          pagination.nextPage();
+        if (this.moreResults) {
+          this.getNextPage = () => {
+            pagination.nextPage();
+          };
         }
         if (
           status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS
