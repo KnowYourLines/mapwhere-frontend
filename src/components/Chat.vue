@@ -1,5 +1,15 @@
 <template>
   <div v-if="userAllowed">
+    <div class="column-right">
+      <br />
+      <ChatMembers
+        :roomMembers="roomMembers"
+        :privateRoom="privateRoom"
+        :joinRequests="joinRequests"
+        :socketRef="socketRef"
+      />
+    </div>
+
     <div class="column-center">
       Room name:
       <input
@@ -65,6 +75,10 @@
         :placeType="placeType"
       ></component>
       <br />
+    </div>
+    <div class="column-left">
+      <br />
+      <ChatHistory :notifications="notifications" :socketRef="socketRef" />
     </div>
   </div>
   <div class="column-center" v-else>
@@ -213,12 +227,28 @@ export default {
 </script>
 <style scoped>
 @media (orientation: landscape) {
+  .column-left {
+    float: left;
+    width: 33.333%;
+  }
+  .column-right {
+    float: right;
+    width: 33.333%;
+  }
   .column-center {
     display: inline-block;
-    width: 100%;
+    width: 33.333%;
   }
 }
 @media (orientation: portrait) {
+  .column-left {
+    width: 100%;
+    background-color: rgb(227, 246, 255);
+  }
+  .column-right {
+    width: 100%;
+    background-color: rgb(227, 246, 255);
+  }
   .column-center {
     width: 100%;
   }

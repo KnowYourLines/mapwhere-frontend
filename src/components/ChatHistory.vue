@@ -1,7 +1,5 @@
 <template>
-  <span>Your rooms:</span><br /><br /><button @click="createNewRoom">
-    New room
-  </button>
+  <span>Your rooms:</span>
   <ul id="array-rendering">
     <li v-for="notification in notifications" :key="notification.room">
       <div v-if="notification.read" class="read-notification">
@@ -29,11 +27,6 @@ export default {
     notifications: {
       type: Array,
       required: true,
-    },
-  },
-  methods: {
-    createNewRoom: function () {
-      window.location.href = window.location.href.split("?")[0];
     },
   },
 };
