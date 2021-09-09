@@ -50,6 +50,7 @@ export default {
     "highlight-vote",
     "place-type",
     "new-places",
+    "new-place-type-results",
   ],
   data() {
     return {
@@ -323,6 +324,8 @@ export default {
             } else if ("places" in data) {
               console.log(data.places);
               this.$emit("new-places", data.places);
+            } else if ("place_type_results" in data) {
+              this.$emit("new-place-type-results", data.place_type_results);
             } else {
               this.$emit("new-message", data.message + "\n");
             }

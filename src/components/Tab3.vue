@@ -90,9 +90,9 @@
               </tr>
             </tbody>
           </table>
-          <button class="load-more" v-if="moreResults" @click="findMoreResults">
+          <!-- <button class="load-more" v-if="moreResults" @click="findMoreResults">
             Load more
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
@@ -113,6 +113,10 @@ export default {
       required: true,
     },
     usersMissingLocations: {
+      type: Array,
+      required: true,
+    },
+    placeTypeResults: {
       type: Array,
       required: true,
     },
@@ -326,16 +330,102 @@ export default {
         this.map.data.addGeoJson(geoJson);
       }
     },
+    placeTypeResults: function (newResults) {
+      console.log(newResults);
+      const infoWindow = new window.google.maps.InfoWindow({
+        content: this.$refs.infoContent,
+      });
+      window.google.maps.event.addListener(
+        infoWindow,
+        "closeclick",
+        function () {
+          this.selectedResultIndex = null;
+        }.bind(this)
+      );
+      for (let i = 0; i < this.markers.length; i++) {
+        if (this.markers[i]) {
+          this.markers[i].setMap(null);
+        }
+      }
+      this.markers = [];
+      this.placeResults = this.placeTypeResults;
+      for (let i = 0; i < this.placeResults.length; i++) {
+        // Use marker animation to drop the icons incrementally on the map.
+        this.markers[i] = new window.google.maps.Marker({
+          position: this.placeResults[i].geometry.location,
+          animation: window.google.maps.Animation.DROP,
+        });
+        // If the user clicks a marker, show the details in an info window.
+        this.markers[i].placeResult = this.placeResults[i];
+        window.google.maps.event.addListener(
+          this.markers[i],
+          "click",
+          function () {
+            const marker = this.markers[i];
+            const place = this.placeResults[i];
+            this.selectedResultIndex = i;
+            infoWindow.open(this.map, marker);
+
+            this.$refs.icon.src = place.icon;
+            this.$refs.mapsURL.href = place.url;
+            this.$refs.mapsURL.textContent = place.name;
+            this.$refs.iwAddress.textContent = place.vicinity;
+
+            if (place.formatted_phone_number) {
+              this.$refs.iwPhoneRow.style.display = "";
+              this.$refs.iwPhone.textContent = place.formatted_phone_number;
+            } else {
+              this.$refs.iwPhoneRow.style.display = "none";
+            }
+
+            if (place.rating) {
+              let ratingHtml = "";
+
+              for (let i = 0; i < 5; i++) {
+                if (place.rating < i + 0.5) {
+                  ratingHtml += "&#10025;";
+                } else {
+                  ratingHtml += "&#10029;";
+                }
+                this.$refs.iwRatingRow.style.display = "";
+                this.$refs.iwRating.innerHTML = ratingHtml;
+              }
+            } else {
+              this.$refs.iwRatingRow.style.display = "none";
+            }
+
+            if (place.website) {
+              this.$refs.iwWebsiteRow.style.display = "";
+              this.$refs.websiteURL.href = place.website;
+              this.$refs.websiteURL.textContent = place.website;
+            } else {
+              this.$refs.iwWebsiteRow.style.display = "none";
+            }
+          }.bind(this)
+        );
+        setTimeout(
+          function () {
+            this.markers[i].setMap(this.map);
+          }.bind(this),
+          i
+        );
+      }
+      this.$refs.listing.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "end",
+      });
+    },
   },
   methods: {
-    findMoreResults: function () {
-      this.moreResults = false;
-      if (this.getNextPage) {
-        this.getNextPage();
-      }
-    },
+    // findMoreResults: function () {
+    //   this.moreResults = false;
+    //   if (this.getNextPage) {
+    //     this.getNextPage();
+    //   }
+    // },
     savePlace: function () {
-      let placeToSave = this.placeResults[this.selectedResultIndex];
+      let placeToSave = this.placeTypeResults[this.selectedResultIndex];
       let placeId = placeToSave.place_id;
       let placeLng = placeToSave.geometry.location.lng();
       let placeLat = placeToSave.geometry.location.lat();
@@ -353,171 +443,31 @@ export default {
       window.google.maps.event.trigger(this.markers[index], "click");
     },
     placeTypeSelected: function () {
-      this.socketRef.send(
-        JSON.stringify({ command: "update_place_type", choice: this.selected })
-      );
-      const places = new window.google.maps.places.PlacesService(this.map);
-      const infoWindow = new window.google.maps.InfoWindow({
-        content: this.$refs.infoContent,
-      });
-      window.google.maps.event.addListener(
-        infoWindow,
-        "closeclick",
-        function () {
-          this.selectedResultIndex = null;
-        }.bind(this)
-      );
       const turf = window.turf;
-      let intersection;
       let bbox;
+      let center = turf.point([this.area.centroid_lng, this.area.centroid_lat]);
+      let searchRadius;
 
       if (this.area.type == "Polygon") {
-        intersection = turf.polygon(this.area.coordinates);
-        bbox = turf.bbox(intersection);
+        this.intersection = turf.polygon(this.area.coordinates);
       }
       if (this.area.type == "MultiPolygon") {
-        intersection = turf.multiPolygon(this.area.coordinates);
-        bbox = turf.bbox(intersection);
+        this.intersection = turf.multiPolygon(this.area.coordinates);
       }
-      const sw = { lat: bbox[1], lng: bbox[0] };
-      const ne = { lat: bbox[3], lng: bbox[2] };
-      const search = {
-        bounds: new window.google.maps.LatLngBounds(sw, ne),
-        types: [this.selected],
-      };
-      this.selectedResultIndex = null;
-      this.placeResults = [];
-      for (let i = 0; i < this.markers.length; i++) {
-        if (this.markers[i]) {
-          this.markers[i].setMap(null);
-        }
-      }
-      this.markers = [];
-      places.nearbySearch(search, (results, status, pagination) => {
-        this.moreResults = pagination && pagination.hasNextPage;
-
-        if (
-          status === window.google.maps.places.PlacesServiceStatus.OK &&
-          results
-        ) {
-          results.forEach((result) => {
-            let resultLat = result.geometry.location.lat();
-            let resultLng = result.geometry.location.lng();
-            let location = turf.point([resultLng, resultLat]);
-            let intersectionAsLines = turf.polygonToLine(intersection);
-            let locationDistanceFromIntersection = turf.nearestPointOnLine(
-              intersectionAsLines,
-              location,
-              {
-                units: "degrees",
-              }
-            ).properties.dist;
-
-            if (
-              locationDistanceFromIntersection < 0.001 ||
-              turf.booleanPointInPolygon(location, intersection)
-            ) {
-              this.placeResults.push(result);
-            }
-          });
-
-          for (let i = 0; i < this.placeResults.length; i++) {
-            // Use marker animation to drop the icons incrementally on the map.
-            this.markers[i] = new window.google.maps.Marker({
-              position: this.placeResults[i].geometry.location,
-              animation: window.google.maps.Animation.DROP,
-            });
-            // If the user clicks a marker, show the details in an info window.
-            this.markers[i].placeResult = this.placeResults[i];
-            window.google.maps.event.addListener(
-              this.markers[i],
-              "click",
-              function () {
-                const marker = this.markers[i];
-                this.selectedResultIndex = i;
-                places.getDetails(
-                  { placeId: marker.placeResult.place_id },
-                  (place, status) => {
-                    if (
-                      status !==
-                      window.google.maps.places.PlacesServiceStatus.OK
-                    ) {
-                      return;
-                    }
-                    infoWindow.open(this.map, marker);
-
-                    this.$refs.icon.src = place.icon;
-                    this.$refs.mapsURL.href = place.url;
-                    this.$refs.mapsURL.textContent = place.name;
-                    this.$refs.iwAddress.textContent = place.vicinity;
-
-                    if (place.formatted_phone_number) {
-                      this.$refs.iwPhoneRow.style.display = "";
-                      this.$refs.iwPhone.textContent =
-                        place.formatted_phone_number;
-                    } else {
-                      this.$refs.iwPhoneRow.style.display = "none";
-                    }
-
-                    if (place.rating) {
-                      let ratingHtml = "";
-
-                      for (let i = 0; i < 5; i++) {
-                        if (place.rating < i + 0.5) {
-                          ratingHtml += "&#10025;";
-                        } else {
-                          ratingHtml += "&#10029;";
-                        }
-                        this.$refs.iwRatingRow.style.display = "";
-                        this.$refs.iwRating.innerHTML = ratingHtml;
-                      }
-                    } else {
-                      this.$refs.iwRatingRow.style.display = "none";
-                    }
-
-                    if (place.website) {
-                      this.$refs.iwWebsiteRow.style.display = "";
-                      this.$refs.websiteURL.href = place.website;
-                      this.$refs.websiteURL.textContent = place.website;
-                    } else {
-                      this.$refs.iwWebsiteRow.style.display = "none";
-                    }
-                  }
-                );
-              }.bind(this)
-            );
-            setTimeout(
-              function () {
-                this.markers[i].setMap(this.map);
-              }.bind(this),
-              i
-            );
-          }
-          this.$refs.listing.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "end",
-          });
-        }
-
-        if (this.moreResults) {
-          this.getNextPage = () => {
-            pagination.nextPage();
-          };
-        }
-        if (
-          status === window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS
-        ) {
-          this.placeResults = [];
-          for (let i = 0; i < this.markers.length; i++) {
-            if (this.markers[i]) {
-              this.markers[i].setMap(null);
-            }
-          }
-          this.markers = [];
-          alert("No places found!");
-        }
-      });
+      bbox = turf.bbox(this.intersection);
+      searchRadius = Math.max(
+        turf.distance(center, turf.point([bbox[0], bbox[1]])) * 1000,
+        turf.distance(center, turf.point([bbox[2], bbox[3]])) * 1000
+      );
+      this.socketRef.send(
+        JSON.stringify({
+          command: "update_place_type",
+          choice: this.selected,
+          radius: searchRadius,
+          lat: this.area.centroid_lat,
+          lng: this.area.centroid_lng,
+        })
+      );
     },
   },
   beforeUpdate() {

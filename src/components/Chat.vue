@@ -73,6 +73,7 @@
         :usersMissingLocations="usersMissingLocations"
         :user="user"
         :placeType="placeType"
+        :placeTypeResults="placeTypeResults"
       ></component>
       <br />
     </div>
@@ -154,6 +155,10 @@ export default {
       required: true,
     },
     usersMissingLocations: {
+      type: Array,
+      required: true,
+    },
+    placeTypeResults: {
       type: Array,
       required: true,
     },

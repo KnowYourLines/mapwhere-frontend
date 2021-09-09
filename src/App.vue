@@ -22,6 +22,7 @@
     @highlight-vote="highlightVote"
     @place-type="placeTypeFound"
     @new-places="newPlacesFound"
+    @new-place-type-results="newPlaceTypeResults"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -44,6 +45,7 @@
     :area="area"
     :usersMissingLocations="usersMissingLocations"
     :placeType="placeType"
+    :placeTypeResults="placeTypeResults"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"
@@ -79,9 +81,13 @@ export default {
       usersMissingLocations: [],
       placeType: null,
       places: [],
+      placeTypeResults: [],
     };
   },
   methods: {
+    newPlaceTypeResults: function (results) {
+      this.placeTypeResults = results;
+    },
     newPlacesFound: function (newPlaces) {
       this.places = newPlaces;
       if (this.$refs.chat.$refs.component) {
