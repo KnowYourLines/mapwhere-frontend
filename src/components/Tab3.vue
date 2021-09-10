@@ -418,74 +418,78 @@ export default {
       }
       this.markers = [];
       this.placeResults = this.placeTypeResults;
-      for (let i = 0; i < this.placeResults.length; i++) {
-        // Use marker animation to drop the icons incrementally on the map.
-        this.markers[i] = new window.google.maps.Marker({
-          position: this.placeResults[i].geometry.location,
-          animation: window.google.maps.Animation.DROP,
-        });
-        // If the user clicks a marker, show the details in an info window.
-        this.markers[i].placeResult = this.placeResults[i];
-        window.google.maps.event.addListener(
-          this.markers[i],
-          "click",
-          function () {
-            const marker = this.markers[i];
-            const place = this.placeResults[i];
-            this.selectedResultIndex = i;
-            this.infoWindow.open(this.map, marker);
+      if (this.placeResults.length == 0) {
+        alert("No places found!");
+      } else {
+        for (let i = 0; i < this.placeResults.length; i++) {
+          // Use marker animation to drop the icons incrementally on the map.
+          this.markers[i] = new window.google.maps.Marker({
+            position: this.placeResults[i].geometry.location,
+            animation: window.google.maps.Animation.DROP,
+          });
+          // If the user clicks a marker, show the details in an info window.
+          this.markers[i].placeResult = this.placeResults[i];
+          window.google.maps.event.addListener(
+            this.markers[i],
+            "click",
+            function () {
+              const marker = this.markers[i];
+              const place = this.placeResults[i];
+              this.selectedResultIndex = i;
+              this.infoWindow.open(this.map, marker);
 
-            this.$refs.icon.src = place.icon;
-            this.$refs.mapsURL.href = place.url;
-            this.$refs.mapsURL.textContent = place.name;
-            this.$refs.iwAddress.textContent = place.vicinity;
+              this.$refs.icon.src = place.icon;
+              this.$refs.mapsURL.href = place.url;
+              this.$refs.mapsURL.textContent = place.name;
+              this.$refs.iwAddress.textContent = place.vicinity;
 
-            if (place.formatted_phone_number) {
-              this.$refs.iwPhoneRow.style.display = "";
-              this.$refs.iwPhone.textContent = place.formatted_phone_number;
-            } else {
-              this.$refs.iwPhoneRow.style.display = "none";
-            }
-
-            if (place.rating) {
-              let ratingHtml = "";
-
-              for (let i = 0; i < 5; i++) {
-                if (place.rating < i + 0.5) {
-                  ratingHtml += "&#10025;";
-                } else {
-                  ratingHtml += "&#10029;";
-                }
-                this.$refs.iwRatingRow.style.display = "";
-                this.$refs.iwRating.innerHTML = ratingHtml;
+              if (place.formatted_phone_number) {
+                this.$refs.iwPhoneRow.style.display = "";
+                this.$refs.iwPhone.textContent = place.formatted_phone_number;
+              } else {
+                this.$refs.iwPhoneRow.style.display = "none";
               }
-            } else {
-              this.$refs.iwRatingRow.style.display = "none";
-            }
 
-            if (place.website) {
-              this.$refs.iwWebsiteRow.style.display = "";
-              this.$refs.websiteURL.href = place.website;
-              this.$refs.websiteURL.textContent = place.website;
-            } else {
-              this.$refs.iwWebsiteRow.style.display = "none";
-            }
-          }.bind(this)
-        );
-        setTimeout(
-          function () {
-            this.markers[i].setMap(this.map);
-          }.bind(this),
-          i
-        );
-      }
-      this.$nextTick(() => {
-        this.$refs.listing.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-          inline: "nearest",
+              if (place.rating) {
+                let ratingHtml = "";
+
+                for (let i = 0; i < 5; i++) {
+                  if (place.rating < i + 0.5) {
+                    ratingHtml += "&#10025;";
+                  } else {
+                    ratingHtml += "&#10029;";
+                  }
+                  this.$refs.iwRatingRow.style.display = "";
+                  this.$refs.iwRating.innerHTML = ratingHtml;
+                }
+              } else {
+                this.$refs.iwRatingRow.style.display = "none";
+              }
+
+              if (place.website) {
+                this.$refs.iwWebsiteRow.style.display = "";
+                this.$refs.websiteURL.href = place.website;
+                this.$refs.websiteURL.textContent = place.website;
+              } else {
+                this.$refs.iwWebsiteRow.style.display = "none";
+              }
+            }.bind(this)
+          );
+          setTimeout(
+            function () {
+              this.markers[i].setMap(this.map);
+            }.bind(this),
+            i
+          );
+        }
+        this.$nextTick(() => {
+          this.$refs.listing.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest",
+          });
         });
-      });
+      }
     },
   },
   methods: {
