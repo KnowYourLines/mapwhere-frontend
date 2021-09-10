@@ -387,6 +387,35 @@ export default {
           this.markers[i].setMap(null);
         }
       }
+      if (
+        this.area.type &&
+        this.area.coordinates &&
+        this.area.centroid_lat &&
+        this.area.centroid_lng
+      ) {
+        this.missingArea = false;
+      } else {
+        this.missingArea = true;
+      }
+      if (!this.missingArea) {
+        this.map = new window.google.maps.Map(this.$refs.map, {
+          zoom: 14,
+          center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
+        });
+        const geoJson = {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              geometry: {
+                type: this.area.type,
+                coordinates: this.area.coordinates,
+              },
+            },
+          ],
+        };
+        this.map.data.addGeoJson(geoJson);
+      }
       this.markers = [];
       this.placeResults = this.placeTypeResults;
       for (let i = 0; i < this.placeResults.length; i++) {
