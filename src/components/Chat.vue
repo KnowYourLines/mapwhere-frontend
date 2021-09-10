@@ -74,6 +74,8 @@
         :user="user"
         :placeType="placeType"
         :placeTypeResults="placeTypeResults"
+        :nextPagePlacesToken="nextPagePlacesToken"
+        :nextPagePlaces="nextPagePlaces"
       ></component>
       <br />
     </div>
@@ -162,6 +164,10 @@ export default {
       type: Array,
       required: true,
     },
+    nextPagePlaces: {
+      type: Array,
+      required: true,
+    },
     isochroneRegion: {
       type: String,
       required: false,
@@ -169,6 +175,10 @@ export default {
     placeType: {
       type: String,
       required: false,
+    },
+    nextPagePlacesToken: {
+      type: String,
+      required: true,
     },
   },
   methods: {

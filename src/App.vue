@@ -23,6 +23,8 @@
     @place-type="placeTypeFound"
     @new-places="newPlacesFound"
     @new-place-type-results="newPlaceTypeResults"
+    @next-page-places-token="newNextPagePlacesToken"
+    @next-page-places="nextPagePlacesResults"
   />
   <br /><br />
   <Toggle v-if="userAllowed" v-model="privateRoom" @change="updatePrivacy">
@@ -46,6 +48,8 @@
     :usersMissingLocations="usersMissingLocations"
     :placeType="placeType"
     :placeTypeResults="placeTypeResults"
+    :nextPagePlacesToken="nextPagePlacesToken"
+    :nextPagePlaces="nextPagePlaces"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"
@@ -82,9 +86,19 @@ export default {
       placeType: null,
       places: [],
       placeTypeResults: [],
+      nextPagePlacesToken: "",
+      nextPagePlaces: [],
     };
   },
   methods: {
+    nextPagePlacesResults: function (places, tokenUsed) {
+      if (tokenUsed == this.nextPagePlacesToken) {
+        this.nextPagePlaces = places;
+      }
+    },
+    newNextPagePlacesToken: function (token) {
+      this.nextPagePlacesToken = token;
+    },
     newPlaceTypeResults: function (results) {
       this.placeTypeResults = results;
     },

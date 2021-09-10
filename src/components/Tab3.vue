@@ -75,7 +75,7 @@
         </div>
       </div>
       <div ref="listing">
-        <div v-if="placeResults.length" id="listing">
+        <div v-if="placeResults.length" @scroll="onScroll" id="listing">
           <table class="listing-table">
             <tbody>
               <tr
@@ -90,9 +90,6 @@
               </tr>
             </tbody>
           </table>
-          <!-- <button class="load-more" v-if="moreResults" @click="findMoreResults">
-            Load more
-          </button> -->
         </div>
       </div>
     </div>
@@ -123,6 +120,14 @@ export default {
     placeType: {
       type: String,
       required: false,
+    },
+    nextPagePlacesToken: {
+      type: String,
+      required: true,
+    },
+    nextPagePlaces: {
+      type: Array,
+      required: true,
     },
   },
   data() {
@@ -234,6 +239,72 @@ export default {
     };
   },
   watch: {
+    nextPagePlaces: function (newPlaces) {
+      console.log(newPlaces);
+      let startIndex = this.placeResults.length - 1;
+      this.placeResults = this.placeResults.concat(newPlaces);
+      for (let i = startIndex; i < this.placeResults.length; i++) {
+        // Use marker animation to drop the icons incrementally on the map.
+        this.markers[i] = new window.google.maps.Marker({
+          position: this.placeResults[i].geometry.location,
+          animation: window.google.maps.Animation.DROP,
+        });
+        // If the user clicks a marker, show the details in an info window.
+        this.markers[i].placeResult = this.placeResults[i];
+        window.google.maps.event.addListener(
+          this.markers[i],
+          "click",
+          function () {
+            const marker = this.markers[i];
+            const place = this.placeResults[i];
+            this.selectedResultIndex = i;
+            this.infoWindow.open(this.map, marker);
+
+            this.$refs.icon.src = place.icon;
+            this.$refs.mapsURL.href = place.url;
+            this.$refs.mapsURL.textContent = place.name;
+            this.$refs.iwAddress.textContent = place.vicinity;
+
+            if (place.formatted_phone_number) {
+              this.$refs.iwPhoneRow.style.display = "";
+              this.$refs.iwPhone.textContent = place.formatted_phone_number;
+            } else {
+              this.$refs.iwPhoneRow.style.display = "none";
+            }
+
+            if (place.rating) {
+              let ratingHtml = "";
+
+              for (let i = 0; i < 5; i++) {
+                if (place.rating < i + 0.5) {
+                  ratingHtml += "&#10025;";
+                } else {
+                  ratingHtml += "&#10029;";
+                }
+                this.$refs.iwRatingRow.style.display = "";
+                this.$refs.iwRating.innerHTML = ratingHtml;
+              }
+            } else {
+              this.$refs.iwRatingRow.style.display = "none";
+            }
+
+            if (place.website) {
+              this.$refs.iwWebsiteRow.style.display = "";
+              this.$refs.websiteURL.href = place.website;
+              this.$refs.websiteURL.textContent = place.website;
+            } else {
+              this.$refs.iwWebsiteRow.style.display = "none";
+            }
+          }.bind(this)
+        );
+        setTimeout(
+          function () {
+            this.markers[i].setMap(this.map);
+          }.bind(this),
+          i
+        );
+      }
+    },
     area: function () {
       if (
         this.area.type &&
@@ -299,44 +370,13 @@ export default {
         }
       }
     },
-    markers: function () {
-      if (
-        this.area.type &&
-        this.area.coordinates &&
-        this.area.centroid_lat &&
-        this.area.centroid_lng
-      ) {
-        this.missingArea = false;
-      } else {
-        this.missingArea = true;
-      }
-      if (!this.missingArea) {
-        this.map = new window.google.maps.Map(this.$refs.map, {
-          zoom: 14,
-          center: { lat: this.area.centroid_lat, lng: this.area.centroid_lng },
-        });
-        const geoJson = {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              geometry: {
-                type: this.area.type,
-                coordinates: this.area.coordinates,
-              },
-            },
-          ],
-        };
-        this.map.data.addGeoJson(geoJson);
-      }
-    },
     placeTypeResults: function (newResults) {
       console.log(newResults);
-      const infoWindow = new window.google.maps.InfoWindow({
+      this.infoWindow = new window.google.maps.InfoWindow({
         content: this.$refs.infoContent,
       });
       window.google.maps.event.addListener(
-        infoWindow,
+        this.infoWindow,
         "closeclick",
         function () {
           this.selectedResultIndex = null;
@@ -364,7 +404,7 @@ export default {
             const marker = this.markers[i];
             const place = this.placeResults[i];
             this.selectedResultIndex = i;
-            infoWindow.open(this.map, marker);
+            this.infoWindow.open(this.map, marker);
 
             this.$refs.icon.src = place.icon;
             this.$refs.mapsURL.href = place.url;
@@ -410,20 +450,16 @@ export default {
           i
         );
       }
-      this.$refs.listing.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "end",
+      this.$nextTick(() => {
+        this.$refs.listing.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
       });
     },
   },
   methods: {
-    // findMoreResults: function () {
-    //   this.moreResults = false;
-    //   if (this.getNextPage) {
-    //     this.getNextPage();
-    //   }
-    // },
     savePlace: function () {
       let placeToSave = this.placeTypeResults[this.selectedResultIndex];
       let placeId = placeToSave.place_id;
@@ -469,6 +505,22 @@ export default {
         })
       );
     },
+    onScroll: function ({ target: { scrollTop, clientHeight, scrollHeight } }) {
+      if (
+        scrollHeight == scrollTop + clientHeight &&
+        this.nextPagePlacesToken &&
+        this.$refs.listing.getBoundingClientRect().bottom <=
+          scrollTop + clientHeight
+      ) {
+        console.log(this.nextPagePlacesToken);
+        this.socketRef.send(
+          JSON.stringify({
+            command: "get_next_page_places",
+            token: this.nextPagePlacesToken,
+          })
+        );
+      }
+    },
   },
   beforeUpdate() {
     if (
@@ -505,9 +557,6 @@ export default {
   width: 100%;
 }
 
-.load-more {
-  width: 100%;
-}
 .results:nth-child(odd) {
   background-color: rgb(227, 246, 255);
 }

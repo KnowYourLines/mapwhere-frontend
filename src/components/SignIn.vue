@@ -51,6 +51,8 @@ export default {
     "place-type",
     "new-places",
     "new-place-type-results",
+    "next-page-places-token",
+    "next-page-places",
   ],
   data() {
     return {
@@ -326,6 +328,14 @@ export default {
               this.$emit("new-places", data.places);
             } else if ("place_type_results" in data) {
               this.$emit("new-place-type-results", data.place_type_results);
+            } else if ("next_page_places_token" in data) {
+              this.$emit("next-page-places-token", data.next_page_places_token);
+            } else if ("next_page_place_results" in data) {
+              this.$emit(
+                "next-page-places",
+                data.next_page_place_results,
+                data.token_used
+              );
             } else {
               this.$emit("new-message", data.message + "\n");
             }
