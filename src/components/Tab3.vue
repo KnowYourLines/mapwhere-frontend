@@ -494,10 +494,10 @@ export default {
   },
   methods: {
     savePlace: function () {
-      let placeToSave = this.placeTypeResults[this.selectedResultIndex];
+      let placeToSave = this.placeResults[this.selectedResultIndex];
       let placeId = placeToSave.place_id;
-      let placeLng = placeToSave.geometry.location.lng();
-      let placeLat = placeToSave.geometry.location.lat();
+      let placeLng = placeToSave.geometry.location.lng;
+      let placeLat = placeToSave.geometry.location.lat;
       this.socketRef.send(
         JSON.stringify({
           command: "save_place",
