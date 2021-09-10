@@ -535,12 +535,12 @@ export default {
       );
     },
     onScroll: function ({ target: { scrollTop, clientHeight, scrollHeight } }) {
-      console.log(scrollTop)
-      console.log(clientHeight)
-      console.log(scrollHeight)
-      console.log(this.$refs.listing.getBoundingClientRect().bottom )
+      console.log(scrollTop);
+      console.log(clientHeight);
+      console.log(scrollHeight);
+      console.log(this.$refs.listing.getBoundingClientRect().bottom);
       if (
-        scrollHeight == scrollTop + clientHeight &&
+        scrollHeight == Math.round(scrollTop + clientHeight) &&
         this.nextPagePlacesToken &&
         this.$refs.listing.getBoundingClientRect().bottom <=
           scrollTop + clientHeight
