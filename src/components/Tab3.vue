@@ -467,9 +467,7 @@ export default {
       this.area.centroid_lng
     ) {
       this.missingArea = false;
-      this.$nextTick(() => {
-        this.$refs.query.focus();
-      });
+      this.$refs.query.focus();
     } else {
       this.missingArea = true;
     }
