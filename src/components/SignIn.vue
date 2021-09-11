@@ -48,9 +48,9 @@ export default {
     "highlight-chat",
     "highlight-area",
     "highlight-vote",
-    "place-type",
+    "area-query",
     "new-places",
-    "new-place-type-results",
+    "new-area-query-results",
     "next-page-places-token",
     "next-page-places",
   ],
@@ -152,7 +152,7 @@ export default {
             );
             this.socketRef.send(
               JSON.stringify({
-                command: "fetch_place_type",
+                command: "fetch_area_query",
               })
             );
           };
@@ -315,19 +315,19 @@ export default {
               this.$emit("highlight-vote");
             } else if ("highlight_area" in data) {
               this.$emit("highlight-area");
-            } else if ("place_type" in data) {
-              this.$emit("place-type", data.place_type);
-            } else if ("refresh_place_type" in data) {
+            } else if ("area_query" in data) {
+              this.$emit("area-query", data.area_query);
+            } else if ("refresh_area_query" in data) {
               this.socketRef.send(
-                JSON.stringify({ command: "fetch_place_type" })
+                JSON.stringify({ command: "fetch_area_query" })
               );
             } else if ("refresh_places" in data) {
               this.socketRef.send(JSON.stringify({ command: "fetch_places" }));
             } else if ("places" in data) {
               console.log(data.places);
               this.$emit("new-places", data.places);
-            } else if ("place_type_results" in data) {
-              this.$emit("new-place-type-results", data.place_type_results);
+            } else if ("area_query_results" in data) {
+              this.$emit("new-area-query-results", data.area_query_results);
             } else if ("next_page_places_token" in data) {
               this.$emit("next-page-places-token", data.next_page_places_token);
             } else if ("next_page_place_results" in data) {

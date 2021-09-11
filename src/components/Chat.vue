@@ -72,8 +72,8 @@
         :area="area"
         :usersMissingLocations="usersMissingLocations"
         :user="user"
-        :placeType="placeType"
-        :placeTypeResults="placeTypeResults"
+        :areaQuery="areaQuery"
+        :areaQueryResults="areaQueryResults"
         :nextPagePlacesToken="nextPagePlacesToken"
         :nextPagePlaces="nextPagePlaces"
       ></component>
@@ -160,7 +160,7 @@ export default {
       type: Array,
       required: true,
     },
-    placeTypeResults: {
+    areaQueryResults: {
       type: Array,
       required: true,
     },
@@ -172,7 +172,7 @@ export default {
       type: String,
       required: false,
     },
-    placeType: {
+    areaQuery: {
       type: String,
       required: false,
     },

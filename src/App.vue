@@ -20,9 +20,9 @@
     @highlight-area="highlightArea"
     @highlight-chat="highlightChat"
     @highlight-vote="highlightVote"
-    @place-type="placeTypeFound"
+    @area-query="areaQueryFound"
     @new-places="newPlacesFound"
-    @new-place-type-results="newPlaceTypeResults"
+    @new-area-query-results="newAreaQueryResults"
     @next-page-places-token="newNextPagePlacesToken"
     @next-page-places="nextPagePlacesResults"
   />
@@ -46,8 +46,8 @@
     :isochroneRegion="isochroneRegion"
     :area="area"
     :usersMissingLocations="usersMissingLocations"
-    :placeType="placeType"
-    :placeTypeResults="placeTypeResults"
+    :areaQuery="areaQuery"
+    :areaQueryResults="areaQueryResults"
     :nextPagePlacesToken="nextPagePlacesToken"
     :nextPagePlaces="nextPagePlaces"
     v-model:username.lazy.trim="username"
@@ -83,9 +83,9 @@ export default {
       isochroneRegion: "",
       area: {},
       usersMissingLocations: [],
-      placeType: null,
+      areaQuery: null,
       places: [],
-      placeTypeResults: [],
+      areaQueryResults: [],
       nextPagePlacesToken: "",
       nextPagePlaces: [],
     };
@@ -99,8 +99,8 @@ export default {
     newNextPagePlacesToken: function (token) {
       this.nextPagePlacesToken = token;
     },
-    newPlaceTypeResults: function (results) {
-      this.placeTypeResults = results;
+    newAreaQueryResults: function (results) {
+      this.areaQueryResults = results;
     },
     newPlacesFound: function (newPlaces) {
       this.places = newPlaces;
@@ -117,8 +117,8 @@ export default {
         }
       }
     },
-    placeTypeFound: function (choice) {
-      this.placeType = choice;
+    areaQueryFound: function (query) {
+      this.areaQuery = query;
     },
     newIsochrones: function (isochrones) {
       const turf = window.turf;

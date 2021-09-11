@@ -10,18 +10,16 @@
       </ul>
     </div>
     <div v-if="!missingArea">
-      <div id="v-model-select-dynamic" class="demo">
+      <div>
         <br />
-        <select v-model="selected" @change="placeTypeSelected">
-          <option :value="null" selected disabled hidden>Look for...</option>
-          <option
-            v-for="option in options"
-            :value="option.value"
-            :key="option.value"
-          >
-            {{ option.text }}
-          </option>
-        </select>
+        <input
+          ref="query"
+          type="text"
+          v-model.lazy.trim="query"
+          placeholder="Search area for..."
+          @keyup.enter="submitAreaQuery"
+          @focus="$event.target.select()"
+        />
       </div>
       <div>
         <div id="map" ref="map"></div>
@@ -113,11 +111,11 @@ export default {
       type: Array,
       required: true,
     },
-    placeTypeResults: {
+    areaQueryResults: {
       type: Array,
       required: true,
     },
-    placeType: {
+    areaQuery: {
       type: String,
       required: false,
     },
@@ -137,105 +135,7 @@ export default {
       placeResults: [],
       selectedResultIndex: null,
       markers: [],
-      selected: this.placeType,
-      options: [
-        { text: "Accounting", value: "accounting" },
-        { text: "Airport", value: "airport" },
-        { text: "Amusement Park", value: "amusement_park" },
-        { text: "Aquarium", value: "aquarium" },
-        { text: "Art Gallery", value: "art_gallery" },
-        { text: "ATM", value: "atm" },
-        { text: "Bakery", value: "bakery" },
-        { text: "Bank", value: "bank" },
-        { text: "Bar", value: "bar" },
-        { text: "Beauty Salon", value: "beauty_salon" },
-        { text: "Bicycle Store", value: "bicycle_store" },
-        { text: "Book Store", value: "book_store" },
-        { text: "Bowling Alley", value: "bowling_alley" },
-        { text: "Bus Station", value: "bus_station" },
-        { text: "Cafe", value: "cafe" },
-        { text: "Campground", value: "campground" },
-        { text: "Car Dealer", value: "car_dealer" },
-        { text: "Car Rental", value: "car_rental" },
-        { text: "Car Repair", value: "car_repair" },
-        { text: "Car Wash", value: "car_wash" },
-        { text: "Casino", value: "casino" },
-        { text: "Cemetery", value: "cemetery" },
-        { text: "Church", value: "church" },
-        { text: "City Hall", value: "city_hall" },
-        { text: "Clothing Store", value: "clothing_store" },
-        { text: "Convenience Store", value: "convenience_store" },
-        { text: "Courthouse", value: "courthouse" },
-        { text: "Dentist", value: "dentist" },
-        { text: "Department Store", value: "department_store" },
-        { text: "Doctor", value: "doctor" },
-        { text: "Drugstore", value: "drugstore" },
-        { text: "Electrician", value: "electrician" },
-        { text: "Electronics Store", value: "electronics_store" },
-        { text: "Embassy", value: "embassy" },
-        { text: "Fire Station", value: "fire_station" },
-        { text: "Florist", value: "florist" },
-        { text: "Funeral Home", value: "funeral_home" },
-        { text: "Furniture Store", value: "furniture_store" },
-        { text: "Gas Station", value: "gas_station" },
-        { text: "Gym", value: "gym" },
-        { text: "Hair Care", value: "hair_care" },
-        { text: "Hardware Store", value: "hardware_store" },
-        { text: "Hindu Temple", value: "hindu_temple" },
-        { text: "Home Goods Store", value: "home_goods_store" },
-        { text: "Hospital", value: "hospital" },
-        { text: "Insurance Agency", value: "insurance_agency" },
-        { text: "Jewelry Store", value: "jewelry_store" },
-        { text: "Laundry", value: "laundry" },
-        { text: "Lawyer", value: "lawyer" },
-        { text: "Library", value: "library" },
-        { text: "Light Rail Station", value: "light_rail_station" },
-        { text: "Liquor Store", value: "liquor_store" },
-        { text: "Local Government Office", value: "local_government_office" },
-        { text: "Locksmith", value: "locksmith" },
-        { text: "Lodging", value: "lodging" },
-        { text: "Meal Delivery", value: "meal_delivery" },
-        { text: "Meal Takeaway", value: "meal_takeaway" },
-        { text: "Mosque", value: "mosque" },
-        { text: "Movie Rental", value: "movie_rental" },
-        { text: "Movie Theater", value: "movie_theater" },
-        { text: "Moving Company", value: "moving_company" },
-        { text: "Museum", value: "museum" },
-        { text: "Night Club", value: "night_club" },
-        { text: "Painter", value: "painter" },
-        { text: "Park", value: "park" },
-        { text: "Parking", value: "parking" },
-        { text: "Pet Store", value: "pet_store" },
-        { text: "Pharmacy", value: "pharmacy" },
-        { text: "Physiotherapist", value: "physiotherapist" },
-        { text: "Plumber", value: "plumber" },
-        { text: "Police", value: "police" },
-        { text: "Post Office", value: "post_office" },
-        { text: "Primary School", value: "primary_school" },
-        { text: "Real Estate Agency", value: "real_estate_agency" },
-        { text: "Restaurant", value: "restaurant" },
-        { text: "Roofing Contractor", value: "roofing_contractor" },
-        { text: "RV Park", value: "rv_park" },
-        { text: "School", value: "school" },
-        { text: "Secondary School", value: "secondary_school" },
-        { text: "Shoe Store", value: "shoe_store" },
-        { text: "Shopping Mall", value: "shopping_mall" },
-        { text: "Spa", value: "spa" },
-        { text: "Stadium", value: "stadium" },
-        { text: "Storage", value: "storage" },
-        { text: "Store", value: "store" },
-        { text: "Subway Station", value: "subway_station" },
-        { text: "Supermarket", value: "supermarket" },
-        { text: "Synagogue", value: "synagogue" },
-        { text: "Taxi Stand", value: "taxi_stand" },
-        { text: "Tourist Attraction", value: "tourist_attraction" },
-        { text: "Train Station", value: "train_station" },
-        { text: "Transit Station", value: "transit_station" },
-        { text: "Travel Agency", value: "travel_agency" },
-        { text: "University", value: "university" },
-        { text: "Veterinary Care", value: "veterinary_care" },
-        { text: "Zoo", value: "zoo" },
-      ],
+      query: this.areaQuery,
     };
   },
   watch: {
@@ -339,8 +239,8 @@ export default {
               ],
             };
             this.map.data.addGeoJson(geoJson);
-            if (this.selected) {
-              this.placeTypeSelected();
+            if (this.query) {
+              this.submitAreaQuery();
             }
           });
         } else {
@@ -364,13 +264,13 @@ export default {
             ],
           };
           this.map.data.addGeoJson(geoJson);
-          if (this.selected) {
-            this.placeTypeSelected();
+          if (this.query) {
+            this.submitAreaQuery();
           }
         }
       }
     },
-    placeTypeResults: function (newResults) {
+    areaQueryResults: function (newResults) {
       console.log(newResults);
       this.infoWindow = new window.google.maps.InfoWindow({
         content: this.$refs.infoContent,
@@ -417,7 +317,7 @@ export default {
         this.map.data.addGeoJson(geoJson);
       }
       this.markers = [];
-      this.placeResults = this.placeTypeResults;
+      this.placeResults = this.areaQueryResults;
       if (this.placeResults.length == 0) {
         alert("No places found!");
       } else {
@@ -511,7 +411,7 @@ export default {
       this.selectedResultIndex = index;
       window.google.maps.event.trigger(this.markers[index], "click");
     },
-    placeTypeSelected: function () {
+    submitAreaQuery: function () {
       const turf = window.turf;
       let bbox;
       let center = turf.point([this.area.centroid_lng, this.area.centroid_lat]);
@@ -530,8 +430,8 @@ export default {
       );
       this.socketRef.send(
         JSON.stringify({
-          command: "update_place_type",
-          choice: this.selected,
+          command: "update_area_query",
+          query: this.query,
           radius: searchRadius,
           lat: this.area.centroid_lat,
           lng: this.area.centroid_lng,
@@ -567,6 +467,7 @@ export default {
       this.area.centroid_lng
     ) {
       this.missingArea = false;
+      this.$refs.query.focus();
     } else {
       this.missingArea = true;
     }
