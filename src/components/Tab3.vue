@@ -72,8 +72,13 @@
           </div>
         </div>
       </div>
-      <div ref="listing">
-        <div v-if="placeResults.length" @scroll="onScroll" id="listing">
+      <div ref="list">
+        <div
+          v-if="placeResults.length"
+          @scroll="onScroll"
+          ref="listing"
+          id="listing"
+        >
           <table class="listing-table">
             <tbody>
               <tr
@@ -141,68 +146,70 @@ export default {
   watch: {
     nextPagePlaces: function (newPlaces) {
       console.log(newPlaces);
-      let startIndex = this.placeResults.length - 1;
-      this.placeResults = this.placeResults.concat(newPlaces);
-      for (let i = startIndex; i < this.placeResults.length; i++) {
-        // Use marker animation to drop the icons incrementally on the map.
-        this.markers[i] = new window.google.maps.Marker({
-          position: this.placeResults[i].geometry.location,
-          animation: window.google.maps.Animation.DROP,
-        });
-        // If the user clicks a marker, show the details in an info window.
-        this.markers[i].placeResult = this.placeResults[i];
-        window.google.maps.event.addListener(
-          this.markers[i],
-          "click",
-          function () {
-            const marker = this.markers[i];
-            const place = this.placeResults[i];
-            this.selectedResultIndex = i;
-            this.infoWindow.open(this.map, marker);
+      if (newPlaces.length > 0) {
+        let startIndex = this.placeResults.length - 1;
+        this.placeResults = this.placeResults.concat(newPlaces);
+        for (let i = startIndex; i < this.placeResults.length; i++) {
+          // Use marker animation to drop the icons incrementally on the map.
+          this.markers[i] = new window.google.maps.Marker({
+            position: this.placeResults[i].geometry.location,
+            animation: window.google.maps.Animation.DROP,
+          });
+          // If the user clicks a marker, show the details in an info window.
+          this.markers[i].placeResult = this.placeResults[i];
+          window.google.maps.event.addListener(
+            this.markers[i],
+            "click",
+            function () {
+              const marker = this.markers[i];
+              const place = this.placeResults[i];
+              this.selectedResultIndex = i;
+              this.infoWindow.open(this.map, marker);
 
-            this.$refs.icon.src = place.icon;
-            this.$refs.mapsURL.href = place.url;
-            this.$refs.mapsURL.textContent = place.name;
-            this.$refs.iwAddress.textContent = place.vicinity;
+              this.$refs.icon.src = place.icon;
+              this.$refs.mapsURL.href = place.url;
+              this.$refs.mapsURL.textContent = place.name;
+              this.$refs.iwAddress.textContent = place.vicinity;
 
-            if (place.formatted_phone_number) {
-              this.$refs.iwPhoneRow.style.display = "";
-              this.$refs.iwPhone.textContent = place.formatted_phone_number;
-            } else {
-              this.$refs.iwPhoneRow.style.display = "none";
-            }
-
-            if (place.rating) {
-              let ratingHtml = "";
-
-              for (let i = 0; i < 5; i++) {
-                if (place.rating < i + 0.5) {
-                  ratingHtml += "&#10025;";
-                } else {
-                  ratingHtml += "&#10029;";
-                }
-                this.$refs.iwRatingRow.style.display = "";
-                this.$refs.iwRating.innerHTML = ratingHtml;
+              if (place.formatted_phone_number) {
+                this.$refs.iwPhoneRow.style.display = "";
+                this.$refs.iwPhone.textContent = place.formatted_phone_number;
+              } else {
+                this.$refs.iwPhoneRow.style.display = "none";
               }
-            } else {
-              this.$refs.iwRatingRow.style.display = "none";
-            }
 
-            if (place.website) {
-              this.$refs.iwWebsiteRow.style.display = "";
-              this.$refs.websiteURL.href = place.website;
-              this.$refs.websiteURL.textContent = place.website;
-            } else {
-              this.$refs.iwWebsiteRow.style.display = "none";
-            }
-          }.bind(this)
-        );
-        setTimeout(
-          function () {
-            this.markers[i].setMap(this.map);
-          }.bind(this),
-          i
-        );
+              if (place.rating) {
+                let ratingHtml = "";
+
+                for (let i = 0; i < 5; i++) {
+                  if (place.rating < i + 0.5) {
+                    ratingHtml += "&#10025;";
+                  } else {
+                    ratingHtml += "&#10029;";
+                  }
+                  this.$refs.iwRatingRow.style.display = "";
+                  this.$refs.iwRating.innerHTML = ratingHtml;
+                }
+              } else {
+                this.$refs.iwRatingRow.style.display = "none";
+              }
+
+              if (place.website) {
+                this.$refs.iwWebsiteRow.style.display = "";
+                this.$refs.websiteURL.href = place.website;
+                this.$refs.websiteURL.textContent = place.website;
+              } else {
+                this.$refs.iwWebsiteRow.style.display = "none";
+              }
+            }.bind(this)
+          );
+          setTimeout(
+            function () {
+              this.markers[i].setMap(this.map);
+            }.bind(this),
+            i
+          );
+        }
       }
     },
     area: function () {
@@ -383,7 +390,7 @@ export default {
           );
         }
         this.$nextTick(() => {
-          this.$refs.listing.scrollIntoView({
+          this.$refs.list.scrollIntoView({
             behavior: "smooth",
             block: "start",
             inline: "nearest",
@@ -391,6 +398,25 @@ export default {
         });
       }
     },
+    // nextPagePlacesToken: function () {
+    //   this.$nextTick(() => {
+    //     if (
+    //       this.$refs.listing &&
+    //       !(
+    //         this.$refs.listing.scrollHeight > this.$refs.listing.clientHeight
+    //       ) &&
+    //       this.nextPagePlacesToken
+    //     ) {
+    //       console.log("hello");
+    //       this.socketRef.send(
+    //         JSON.stringify({
+    //           command: "get_next_page_places",
+    //           token: this.nextPagePlacesToken,
+    //         })
+    //       );
+    //     }
+    //   });
+    // },
   },
   methods: {
     savePlace: function () {
@@ -442,11 +468,11 @@ export default {
       console.log(scrollTop);
       console.log(clientHeight);
       console.log(scrollHeight);
-      console.log(this.$refs.listing.getBoundingClientRect().bottom);
+      console.log(this.$refs.list.getBoundingClientRect().bottom);
       if (
         scrollHeight == Math.round(scrollTop + clientHeight) &&
         this.nextPagePlacesToken &&
-        this.$refs.listing.getBoundingClientRect().bottom <=
+        this.$refs.list.getBoundingClientRect().bottom <=
           scrollTop + clientHeight
       ) {
         console.log(this.nextPagePlacesToken);
@@ -467,7 +493,6 @@ export default {
       this.area.centroid_lng
     ) {
       this.missingArea = false;
-      this.$refs.query.focus();
     } else {
       this.missingArea = true;
     }
@@ -475,6 +500,11 @@ export default {
       this.missingLocations = true;
     } else {
       this.missingLocations = false;
+    }
+  },
+  mounted() {
+    if (this.$refs.query) {
+      this.$refs.query.focus();
     }
   },
 };
