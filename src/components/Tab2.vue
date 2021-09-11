@@ -211,7 +211,6 @@ export default {
             lng: parseFloat(position.coords.longitude),
           };
           geocoder.geocode({ location: latlng }).then((response) => {
-            console.log(response);
             if (response.results.length > 0) {
               const foundLocation = response.results[0];
               this.yourLocation = foundLocation.formatted_address;
@@ -250,14 +249,9 @@ export default {
       if (places.length == 0) {
         this.possiblePlaces = null;
         this.noLocationFound = true;
-        console.log("no location found");
       }
 
       if (places.length == 1) {
-        console.log(places[0].geometry.location.lat());
-        console.log(places[0].geometry.location.lng());
-        console.log(places);
-
         this.lng = places[0].geometry.location.lng();
         this.lat = places[0].geometry.location.lat();
         this.placeId = places[0].place_id;
@@ -282,7 +276,6 @@ export default {
       if (places.length > 1) {
         this.possiblePlaces = places;
         this.noLocationFound = false;
-        console.log(places);
       }
     });
   },

@@ -331,7 +331,6 @@ export default {
             } else if ("refresh_places" in data) {
               this.socketRef.send(JSON.stringify({ command: "fetch_places" }));
             } else if ("places" in data) {
-              console.log(data.places);
               this.$emit("new-places", data.places);
             } else if ("area_query_results" in data) {
               this.$emit("new-area-query-results", data.area_query_results);

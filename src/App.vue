@@ -142,7 +142,6 @@ export default {
           }
         }
       });
-      console.log(intersection);
       if (intersection) {
         let center = turf.centerOfMass(intersection);
         const newArea = {
@@ -151,12 +150,10 @@ export default {
           type: intersection.geometry.type,
           coordinates: intersection.geometry.coordinates,
         };
-        console.log(center);
         this.socket.send(
           JSON.stringify({ command: "update_intersection", ...newArea })
         );
       } else {
-        console.log("delete");
         this.socket.send(JSON.stringify({ command: "delete_intersection" }));
       }
     },
@@ -289,7 +286,6 @@ export default {
       } else {
         this.isochroneRegion = "";
       }
-      console.log(this.isochroneRegion);
     },
     fetchingMessage: function (message) {
       if (this.$refs.chat.$refs.component) {

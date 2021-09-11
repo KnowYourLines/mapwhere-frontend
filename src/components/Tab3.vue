@@ -145,7 +145,6 @@ export default {
   },
   watch: {
     nextPagePlaces: function (newPlaces) {
-      console.log(newPlaces);
       if (newPlaces.length > 0) {
         let startIndex = this.placeResults.length - 1;
         this.placeResults = this.placeResults.concat(newPlaces);
@@ -277,8 +276,7 @@ export default {
         }
       }
     },
-    areaQueryResults: function (newResults) {
-      console.log(newResults);
+    areaQueryResults: function () {
       this.infoWindow = new window.google.maps.InfoWindow({
         content: this.$refs.infoContent,
       });
@@ -398,25 +396,6 @@ export default {
         });
       }
     },
-    // nextPagePlacesToken: function () {
-    //   this.$nextTick(() => {
-    //     if (
-    //       this.$refs.listing &&
-    //       !(
-    //         this.$refs.listing.scrollHeight > this.$refs.listing.clientHeight
-    //       ) &&
-    //       this.nextPagePlacesToken
-    //     ) {
-    //       console.log("hello");
-    //       this.socketRef.send(
-    //         JSON.stringify({
-    //           command: "get_next_page_places",
-    //           token: this.nextPagePlacesToken,
-    //         })
-    //       );
-    //     }
-    //   });
-    // },
   },
   methods: {
     savePlace: function () {
@@ -465,17 +444,12 @@ export default {
       );
     },
     onScroll: function ({ target: { scrollTop, clientHeight, scrollHeight } }) {
-      console.log(scrollTop);
-      console.log(clientHeight);
-      console.log(scrollHeight);
-      console.log(this.$refs.list.getBoundingClientRect().bottom);
       if (
         scrollHeight == Math.round(scrollTop + clientHeight) &&
         this.nextPagePlacesToken &&
         this.$refs.list.getBoundingClientRect().bottom <=
           scrollTop + clientHeight
       ) {
-        console.log(this.nextPagePlacesToken);
         this.socketRef.send(
           JSON.stringify({
             command: "get_next_page_places",
