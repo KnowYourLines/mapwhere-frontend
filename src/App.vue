@@ -83,7 +83,7 @@ export default {
       isochroneRegion: "",
       area: {},
       usersMissingLocations: [],
-      areaQuery: null,
+      areaQuery: "",
       places: [],
       areaQueryResults: [],
       nextPagePlacesToken: "",
