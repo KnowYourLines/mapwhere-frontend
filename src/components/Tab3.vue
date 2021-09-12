@@ -17,7 +17,7 @@
           type="text"
           v-model.lazy.trim="query"
           placeholder="Search area for..."
-          @keyup.enter="submitAreaQuery"
+          @keyup.enter.stop="submitAreaQuery"
           @focus.stop="$event.target.select()"
         />
       </div>
