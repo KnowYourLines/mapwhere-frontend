@@ -17,8 +17,6 @@
           type="text"
           :value="query"
           placeholder="Search area for..."
-          @keyup.enter.stop="submitAreaQuery"
-          @focus.stop="$event.target.select()"
         />
       </div>
       <div>
