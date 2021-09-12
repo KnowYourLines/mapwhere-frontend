@@ -17,6 +17,7 @@
           type="text"
           :value="query"
           placeholder="Search area for..."
+          @focus.prevent="$event.target.select()"
         />
       </div>
       <div>
