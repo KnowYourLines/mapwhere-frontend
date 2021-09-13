@@ -472,11 +472,11 @@ export default {
       this.missingLocations = false;
     }
   },
-  // mounted() {
-  //   if (this.$refs.query) {
-  //     this.$refs.query.focus();
-  //   }
-  // },
+  mounted() {
+    if (this.$refs.query) {
+      this.$refs.query.focus();
+    }
+  },
 };
 </script>
 
