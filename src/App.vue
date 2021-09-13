@@ -23,7 +23,6 @@
     @area-query="areaQueryFound"
     @new-places="newPlacesFound"
     @new-area-query-results="newAreaQueryResults"
-    @next-page-places-token="newNextPagePlacesToken"
     @next-page-places="nextPagePlacesResults"
   />
   <br /><br />
@@ -91,16 +90,15 @@ export default {
     };
   },
   methods: {
-    nextPagePlacesResults: function (places, tokenUsed) {
+    nextPagePlacesResults: function (places, tokenUsed, newToken) {
       if (tokenUsed == this.nextPagePlacesToken) {
         this.nextPagePlaces = places;
+        this.nextPagePlacesToken = newToken;
       }
     },
-    newNextPagePlacesToken: function (token) {
-      this.nextPagePlacesToken = token;
-    },
-    newAreaQueryResults: function (results) {
+    newAreaQueryResults: function (results, token) {
       this.areaQueryResults = results;
+      this.nextPagePlacesToken = token;
     },
     newPlacesFound: function (newPlaces) {
       this.places = newPlaces;

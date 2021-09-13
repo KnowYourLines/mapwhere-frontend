@@ -333,14 +333,17 @@ export default {
             } else if ("places" in data) {
               this.$emit("new-places", data.places);
             } else if ("area_query_results" in data) {
-              this.$emit("new-area-query-results", data.area_query_results);
-            } else if ("next_page_places_token" in data) {
-              this.$emit("next-page-places-token", data.next_page_places_token);
+              this.$emit(
+                "new-area-query-results",
+                data.area_query_results,
+                data.next_page_places_token
+              );
             } else if ("next_page_place_results" in data) {
               this.$emit(
                 "next-page-places",
                 data.next_page_place_results,
-                data.token_used
+                data.token_used,
+                data.next_page_places_token
               );
             } else {
               this.$emit("new-message", data.message + "\n");
