@@ -13,7 +13,7 @@
       <br />
       <textarea class="textarea" cols="100" rows="1"></textarea>
       <div id="map" ref="map"></div>
-      <!-- <div style="display: none">
+      <div style="display: none">
         <div ref="infoContent" id="info-content">
           <table>
             <tr ref="iwUrlRow" id="iw-url-row" class="iw_table_row">
@@ -60,7 +60,7 @@
             Save place
           </button>
         </div>
-      </div> -->
+      </div>
       <div ref="list">
         <div
           v-if="placeResults.length"
