@@ -10,59 +10,61 @@
       </ul>
     </div>
     <div v-if="!missingArea">
-      <div id="save-me-from-mobile-browser-bug">
-      <br />
-      <textarea class="textarea" cols="100" rows="1"></textarea>
+      <div id="save-me-from-mobile-browser-bug" class="this-is-fucked">
+        <br />
+        <textarea class="textarea" cols="100" rows="1"></textarea>
       </div>
-      <div id="map" ref="map"></div>
-      <!-- <div style="display: none">
-        <div ref="infoContent" id="info-content">
-          <table>
-            <tr ref="iwUrlRow" id="iw-url-row" class="iw_table_row">
-              <td ref="iwIcon" id="iw-icon" class="iw_table_icon">
-                <img ref="icon" />
-              </td>
-              <td ref="iwURL" id="iw-url">
-                <b
-                  ><a
-                    ref="mapsURL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  ></a
-                ></b>
-              </td>
-            </tr>
-            <tr ref="iwAddressRow" id="iw-address-row" class="iw_table_row">
-              <td class="iw_attribute_name">Address:</td>
-              <td ref="iwAddress" id="iw-address"></td>
-            </tr>
-            <tr ref="iwPhoneRow" id="iw-phone-row" class="iw_table_row">
-              <td class="iw_attribute_name">Telephone:</td>
-              <td ref="iwPhone" id="iw-phone"></td>
-            </tr>
-            <tr ref="iwRatingRow" id="iw-rating-row" class="iw_table_row">
-              <td class="iw_attribute_name">Rating:</td>
-              <td ref="iwRating" id="iw-rating"></td>
-            </tr>
-            <tr ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
-              <td class="iw_attribute_name">Website:</td>
-              <td ref="iwWebsite" id="iw-website">
-                <b
-                  ><a
-                    ref="websiteURL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  ></a
-                ></b>
-              </td>
-            </tr>
-          </table>
-          <br />
-          <button type="submit" class="btn btn__primary" @click="savePlace">
-            Save place
-          </button>
+      <div>
+        <div id="map" ref="map"></div>
+        <div style="display: none">
+          <div ref="infoContent" id="info-content">
+            <table>
+              <tr ref="iwUrlRow" id="iw-url-row" class="iw_table_row">
+                <td ref="iwIcon" id="iw-icon" class="iw_table_icon">
+                  <img ref="icon" />
+                </td>
+                <td ref="iwURL" id="iw-url">
+                  <b
+                    ><a
+                      ref="mapsURL"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    ></a
+                  ></b>
+                </td>
+              </tr>
+              <tr ref="iwAddressRow" id="iw-address-row" class="iw_table_row">
+                <td class="iw_attribute_name">Address:</td>
+                <td ref="iwAddress" id="iw-address"></td>
+              </tr>
+              <tr ref="iwPhoneRow" id="iw-phone-row" class="iw_table_row">
+                <td class="iw_attribute_name">Telephone:</td>
+                <td ref="iwPhone" id="iw-phone"></td>
+              </tr>
+              <tr ref="iwRatingRow" id="iw-rating-row" class="iw_table_row">
+                <td class="iw_attribute_name">Rating:</td>
+                <td ref="iwRating" id="iw-rating"></td>
+              </tr>
+              <tr ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
+                <td class="iw_attribute_name">Website:</td>
+                <td ref="iwWebsite" id="iw-website">
+                  <b
+                    ><a
+                      ref="websiteURL"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    ></a
+                  ></b>
+                </td>
+              </tr>
+            </table>
+            <br />
+            <button type="submit" class="btn btn__primary" @click="savePlace">
+              Save place
+            </button>
+          </div>
         </div>
-      </div> -->
+      </div>
       <div ref="list">
         <div
           v-if="placeResults.length"
