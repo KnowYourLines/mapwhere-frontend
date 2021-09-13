@@ -200,7 +200,9 @@ export default {
           );
           setTimeout(
             function () {
-              this.markers[i].setMap(this.map);
+              if (this.markers[i]) {
+                this.markers[i].setMap(this.map);
+              }
             }.bind(this),
             i
           );
@@ -378,7 +380,9 @@ export default {
           );
           setTimeout(
             function () {
-              this.markers[i].setMap(this.map);
+              if (this.markers[i]) {
+                this.markers[i].setMap(this.map);
+              }
             }.bind(this),
             i
           );
