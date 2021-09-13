@@ -474,7 +474,7 @@ export default {
   },
   mounted() {
     if (this.$refs.query) {
-      this.$refs.query.focus();
+      this.$refs.queryInput.focus();
     }
   },
 };
