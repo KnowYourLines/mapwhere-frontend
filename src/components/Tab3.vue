@@ -11,7 +11,13 @@
     </div>
     <div v-if="!missingArea">
       <br />
-      <textarea class="textarea" cols="100" rows="1"></textarea>
+      <input
+        ref="queryInput"
+        type="text"
+        v-model.lazy.trim="query"
+        placeholder="Search area for..."
+        @focus.prevent="$event.target.select()"
+      />
       <div id="map" ref="map"></div>
       <div style="display: none">
         <div ref="infoContent" id="info-content">
