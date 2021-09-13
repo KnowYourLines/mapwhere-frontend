@@ -10,10 +10,8 @@
       </ul>
     </div>
     <div v-if="!missingArea">
-      <div id="save-me-from-mobile-browser-bug">
       <br />
       <textarea class="textarea" cols="100" rows="1"></textarea>
-      </div>
       <div id="map" ref="map"></div>
       <!-- <div style="display: none">
         <div ref="infoContent" id="info-content">
