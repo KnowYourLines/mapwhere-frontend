@@ -139,7 +139,7 @@ export default {
       placeResults: [],
       selectedResultIndex: null,
       markers: [],
-      query: this.areaQuery,
+      query: '',
     };
   },
   watch: {
