@@ -49,19 +49,18 @@
               <td class="iw_attribute_name">Rating:</td>
               <td ref="iwRating" id="iw-rating"></td>
             </tr>
-            <tr ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
-              <td class="iw_attribute_name">Website:</td>
-              <td ref="iwWebsite" id="iw-website">
-                <b
-                  ><a
-                    ref="websiteURL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  ></a
-                ></b>
-              </td>
-            </tr>
           </table>
+          <div ref="iwWebsiteRow" id="iw-website-row" class="iw_table_row">
+            <div ref="iwWebsite" id="iw-website">
+              <b
+                ><a
+                  ref="websiteURL"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                ></a
+              ></b>
+            </div>
+          </div>
           <br />
           <button type="submit" class="btn btn__primary" @click="savePlace">
             Save place
@@ -192,7 +191,7 @@ export default {
               if (place.website) {
                 this.$refs.iwWebsiteRow.style.display = "";
                 this.$refs.websiteURL.href = place.website;
-                this.$refs.websiteURL.textContent = place.website;
+                this.$refs.websiteURL.textContent = "Go to website";
               } else {
                 this.$refs.iwWebsiteRow.style.display = "none";
               }
@@ -372,7 +371,7 @@ export default {
               if (place.website) {
                 this.$refs.iwWebsiteRow.style.display = "";
                 this.$refs.websiteURL.href = place.website;
-                this.$refs.websiteURL.textContent = place.website;
+                this.$refs.websiteURL.textContent = "Go to website";
               } else {
                 this.$refs.iwWebsiteRow.style.display = "none";
               }
@@ -390,7 +389,7 @@ export default {
         this.$nextTick(() => {
           this.$refs.list.scrollIntoView({
             behavior: "smooth",
-            block: "start",
+            block: "end",
             inline: "nearest",
           });
         });
