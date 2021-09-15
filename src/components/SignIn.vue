@@ -66,12 +66,6 @@ export default {
       firebase
         .auth()
         .signOut()
-        .then(() => {
-          this.showSignIn = true;
-          this.$nextTick(() => {
-            this.ui.start("#firebaseui-auth-container", this.uiConfig);
-          });
-        })
         .catch((err) => {
           console.log(err);
         });
@@ -122,6 +116,11 @@ export default {
         user.getIdToken().then((token) => {
           this.token = token;
           this.showSignIn = this.user.isAnonymous;
+          if (this.showSignIn) {
+            this.$nextTick(() => {
+              this.ui.start("#firebaseui-auth-container", this.uiConfig);
+            });
+          }
           const backendUrl = new URL(process.env.VUE_APP_BACKEND_URL);
           const ws_scheme = backendUrl.protocol == "https:" ? "wss" : "ws";
           const path =
