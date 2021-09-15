@@ -392,14 +392,6 @@ export default {
         },
       },
     };
-    if (
-      firebase.auth().currentUser == null ||
-      firebase.auth().currentUser.isAnonymous
-    ) {
-      this.$nextTick(() => {
-        this.ui.start("#firebaseui-auth-container", this.uiConfig);
-      });
-    }
   },
 };
 </script>
