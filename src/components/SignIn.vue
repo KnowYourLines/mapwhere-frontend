@@ -142,7 +142,6 @@ export default {
             console.log("WebSocket open");
             this.socketRef.send(JSON.stringify({ command: "join_room" }));
             this.socketRef.send(JSON.stringify({ command: "fetch_messages" }));
-            this.socketRef.send(JSON.stringify({ command: "fetch_room_name" }));
             this.socketRef.send(JSON.stringify({ command: "fetch_privacy" }));
             this.socketRef.send(
               JSON.stringify({ command: "fetch_user_notifications" })
