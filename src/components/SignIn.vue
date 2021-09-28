@@ -427,11 +427,13 @@ export default {
     width: 100%;
   }
   .column-left {
-    width: 100%;
+    float: left;
+    width: 50%;
     padding-bottom: 1em;
   }
   .column-right {
-    width: 100%;
+    float: right;
+    width: 50%;
     padding-bottom: 1em;
   }
 
