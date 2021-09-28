@@ -1,18 +1,25 @@
 <template>
   <div>
     <div class="column">
-      <section v-if="showSignIn" id="firebaseui-auth-container"></section>
-      <div v-if="shareable">
-        <div class="column-left">
-          <button @click="signOut">Sign Out</button>
-        </div>
-        <div class="column-right">
+      <div v-if="showSignIn">
+        <section id="firebaseui-auth-container"></section>
+        <div v-if="shareable">
           <button @click="share">Share</button>
         </div>
       </div>
       <div v-else>
-        <div>
-          <button @click="signOut">Sign Out</button>
+        <div v-if="shareable">
+          <div class="column-left">
+            <button @click="signOut">Sign Out</button>
+          </div>
+          <div class="column-right">
+            <button @click="share">Share</button>
+          </div>
+        </div>
+        <div v-else>
+          <div>
+            <button @click="signOut">Sign Out</button>
+          </div>
         </div>
       </div>
     </div>
