@@ -1,32 +1,34 @@
 <template>
   Room members:
-  <ul id="array-rendering">
+  <ul id="members">
     <li v-for="member in roomMembers" :key="member.display_name">
       {{ member.display_name }}
     </li>
   </ul>
-  <span v-if="privateRoom">Users requesting to join:</span>
-  <ul id="array-rendering">
-    <li v-for="request in joinRequests" :key="request.user">
-      {{ request.user__display_name }}
-      <div class="btn-group">
-        <button
-          type="button"
-          class="btn"
-          @click="acceptRequest(request.user__username)"
-        >
-          Accept
-        </button>
-        <button
-          type="submit"
-          class="btn btn__primary"
-          @click="rejectRequest(request.user__username)"
-        >
-          Reject
-        </button>
-      </div>
-    </li>
-  </ul>
+  <div v-if="privateRoom">
+    <span>Users requesting to join:</span>
+    <ul id="requests">
+      <li v-for="request in joinRequests" :key="request.user">
+        {{ request.user__display_name }}
+        <div class="btn-group">
+          <button
+            type="button"
+            class="btn"
+            @click="acceptRequest(request.user__username)"
+          >
+            Accept
+          </button>
+          <button
+            type="submit"
+            class="btn btn__primary"
+            @click="rejectRequest(request.user__username)"
+          >
+            Reject
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 <script>
 export default {
@@ -64,7 +66,16 @@ export default {
 };
 </script>
 <style >
-#array-rendering {
+#members {
   list-style-type: none;
+  height: 15vh;
+  overflow-y: auto;
+  overflow-x: visible;
+}
+#requests {
+  list-style-type: none;
+  height: 15vh;
+  overflow-y: auto;
+  overflow-x: visible;
 }
 </style>

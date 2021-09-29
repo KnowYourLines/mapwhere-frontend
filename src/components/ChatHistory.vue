@@ -38,11 +38,14 @@ export default {
   },
 };
 </script>
-<style >
+<style scoped>
 .unread-notification {
   background-color: #5dbeff;
 }
 #array-rendering {
   list-style-type: none;
+  height: 30vh;
+  overflow-y: auto;
+  overflow-x: visible;
 }
 </style>
