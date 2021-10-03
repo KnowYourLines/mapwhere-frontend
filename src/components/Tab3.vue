@@ -157,45 +157,70 @@ export default {
             "click",
             function () {
               const marker = this.markers[i];
-              const place = this.placeResults[i];
-              this.selectedResultIndex = i;
-              this.infoWindow.open(this.map, marker);
+              let place = this.placeResults[i];
+              const request = {
+                placeId: place.place_id,
+                fields: [
+                  "url",
+                  "formatted_phone_number",
+                  "place_id",
+                  "website",
+                  "vicinity",
+                ],
+              };
+              const service = new window.google.maps.places.PlacesService(
+                this.map
+              );
+              service.getDetails(request, (result, status) => {
+                if (
+                  status === window.google.maps.places.PlacesServiceStatus.OK
+                ) {
+                  place.website = result.website;
+                  place.vicinity = result.vicinity;
+                  this.placeResults[i].place_id = result.place_id;
+                  place.formatted_phone_number = result.formatted_phone_number;
+                  place.url = result.url;
+                  this.selectedResultIndex = i;
+                  this.infoWindow.open(this.map, marker);
 
-              this.$refs.icon.src = place.icon;
-              this.$refs.mapsURL.href = place.url;
-              this.$refs.mapsURL.textContent = place.name;
-              this.$refs.iwAddress.textContent = place.vicinity;
+                  this.$refs.icon.src = place.icon;
+                  this.$refs.mapsURL.href = place.url;
+                  this.$refs.mapsURL.textContent = place.name;
+                  this.$refs.iwAddress.textContent = place.vicinity;
 
-              if (place.formatted_phone_number) {
-                this.$refs.iwPhoneRow.style.display = "";
-                this.$refs.iwPhone.textContent = place.formatted_phone_number;
-              } else {
-                this.$refs.iwPhoneRow.style.display = "none";
-              }
-
-              if (place.rating) {
-                let ratingHtml = "";
-
-                for (let i = 0; i < 5; i++) {
-                  if (place.rating < i + 0.5) {
-                    ratingHtml += "&#10025;";
+                  if (place.formatted_phone_number) {
+                    this.$refs.iwPhoneRow.style.display = "";
+                    this.$refs.iwPhone.textContent =
+                      place.formatted_phone_number;
                   } else {
-                    ratingHtml += "&#10029;";
+                    this.$refs.iwPhoneRow.style.display = "none";
                   }
-                  this.$refs.iwRatingRow.style.display = "";
-                  this.$refs.iwRating.innerHTML = ratingHtml;
-                }
-              } else {
-                this.$refs.iwRatingRow.style.display = "none";
-              }
 
-              if (place.website) {
-                this.$refs.iwWebsiteRow.style.display = "";
-                this.$refs.websiteURL.href = place.website;
-                this.$refs.websiteURL.textContent = "Go to website";
-              } else {
-                this.$refs.iwWebsiteRow.style.display = "none";
-              }
+                  if (place.rating) {
+                    let ratingHtml = "";
+
+                    for (let i = 0; i < 5; i++) {
+                      if (place.rating < i + 0.5) {
+                        ratingHtml += "&#10025;";
+                      } else {
+                        ratingHtml += "&#10029;";
+                      }
+                      this.$refs.iwRatingRow.style.display = "";
+                      this.$refs.iwRating.innerHTML = ratingHtml;
+                    }
+                  } else {
+                    this.$refs.iwRatingRow.style.display = "none";
+                  }
+
+                  if (place.website) {
+                    this.$refs.iwWebsiteRow.style.display = "";
+                    this.$refs.websiteURL.href = place.website;
+                    this.$refs.websiteURL.textContent = "Go to website";
+                  } else {
+                    this.$refs.iwWebsiteRow.style.display = "none";
+                  }
+                }
+              });
             }.bind(this)
           );
           setTimeout(
@@ -337,45 +362,70 @@ export default {
             "click",
             function () {
               const marker = this.markers[i];
-              const place = this.placeResults[i];
-              this.selectedResultIndex = i;
-              this.infoWindow.open(this.map, marker);
+              let place = this.placeResults[i];
+              const request = {
+                placeId: place.place_id,
+                fields: [
+                  "url",
+                  "formatted_phone_number",
+                  "place_id",
+                  "website",
+                  "vicinity",
+                ],
+              };
+              const service = new window.google.maps.places.PlacesService(
+                this.map
+              );
+              service.getDetails(request, (result, status) => {
+                if (
+                  status === window.google.maps.places.PlacesServiceStatus.OK
+                ) {
+                  place.website = result.website;
+                  place.vicinity = result.vicinity;
+                  this.placeResults[i].place_id = result.place_id;
+                  place.formatted_phone_number = result.formatted_phone_number;
+                  place.url = result.url;
+                  this.selectedResultIndex = i;
+                  this.infoWindow.open(this.map, marker);
 
-              this.$refs.icon.src = place.icon;
-              this.$refs.mapsURL.href = place.url;
-              this.$refs.mapsURL.textContent = place.name;
-              this.$refs.iwAddress.textContent = place.vicinity;
+                  this.$refs.icon.src = place.icon;
+                  this.$refs.mapsURL.href = place.url;
+                  this.$refs.mapsURL.textContent = place.name;
+                  this.$refs.iwAddress.textContent = place.vicinity;
 
-              if (place.formatted_phone_number) {
-                this.$refs.iwPhoneRow.style.display = "";
-                this.$refs.iwPhone.textContent = place.formatted_phone_number;
-              } else {
-                this.$refs.iwPhoneRow.style.display = "none";
-              }
-
-              if (place.rating) {
-                let ratingHtml = "";
-
-                for (let i = 0; i < 5; i++) {
-                  if (place.rating < i + 0.5) {
-                    ratingHtml += "&#10025;";
+                  if (place.formatted_phone_number) {
+                    this.$refs.iwPhoneRow.style.display = "";
+                    this.$refs.iwPhone.textContent =
+                      place.formatted_phone_number;
                   } else {
-                    ratingHtml += "&#10029;";
+                    this.$refs.iwPhoneRow.style.display = "none";
                   }
-                  this.$refs.iwRatingRow.style.display = "";
-                  this.$refs.iwRating.innerHTML = ratingHtml;
-                }
-              } else {
-                this.$refs.iwRatingRow.style.display = "none";
-              }
 
-              if (place.website) {
-                this.$refs.iwWebsiteRow.style.display = "";
-                this.$refs.websiteURL.href = place.website;
-                this.$refs.websiteURL.textContent = "Go to website";
-              } else {
-                this.$refs.iwWebsiteRow.style.display = "none";
-              }
+                  if (place.rating) {
+                    let ratingHtml = "";
+
+                    for (let i = 0; i < 5; i++) {
+                      if (place.rating < i + 0.5) {
+                        ratingHtml += "&#10025;";
+                      } else {
+                        ratingHtml += "&#10029;";
+                      }
+                      this.$refs.iwRatingRow.style.display = "";
+                      this.$refs.iwRating.innerHTML = ratingHtml;
+                    }
+                  } else {
+                    this.$refs.iwRatingRow.style.display = "none";
+                  }
+
+                  if (place.website) {
+                    this.$refs.iwWebsiteRow.style.display = "";
+                    this.$refs.websiteURL.href = place.website;
+                    this.$refs.websiteURL.textContent = "Go to website";
+                  } else {
+                    this.$refs.iwWebsiteRow.style.display = "none";
+                  }
+                }
+              });
             }.bind(this)
           );
           setTimeout(
