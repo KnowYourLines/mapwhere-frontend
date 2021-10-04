@@ -170,8 +170,6 @@ export default {
         7200
       ) {
         alert("Total travel time cannot be more than 2 hours!");
-      } else if (!this.isochroneServiceRegion) {
-        alert("Location must be more specific!");
       } else {
         this.socketRef.send(
           JSON.stringify({
@@ -182,7 +180,6 @@ export default {
             transportation: this.travelMode,
             hours: this.hoursToTravel,
             minutes: this.minutesToTravel,
-            region: this.isochroneServiceRegion,
             place_id: this.placeId,
           })
         );
