@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="listing" id="listing">
+    <div v-if="places.length > 0" ref="listing" id="listing">
       <table class="listing-table">
         <tbody>
           <tr class="places" v-for="(place, index) in places" :key="index">
@@ -68,6 +68,7 @@
         </tbody>
       </table>
     </div>
+    <div v-else><br />No places saved.</div>
   </div>
 </template>
 
