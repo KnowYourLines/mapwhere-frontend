@@ -76,6 +76,7 @@
         :areaQueryResults="areaQueryResults"
         :nextPagePlacesToken="nextPagePlacesToken"
         :nextPagePlaces="nextPagePlaces"
+        :places="places"
       ></component>
       <br />
     </div>
@@ -161,6 +162,10 @@ export default {
       required: true,
     },
     areaQueryResults: {
+      type: Array,
+      required: true,
+    },
+    places: {
       type: Array,
       required: true,
     },

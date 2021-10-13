@@ -49,6 +49,7 @@
     :areaQueryResults="areaQueryResults"
     :nextPagePlacesToken="nextPagePlacesToken"
     :nextPagePlaces="nextPagePlaces"
+    :places="places"
     v-model:username.lazy.trim="username"
     v-model:roomName.lazy.trim="roomName"
     @new-join-requests="newJoinRequests"

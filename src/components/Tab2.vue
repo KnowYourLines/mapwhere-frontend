@@ -309,6 +309,9 @@ export default {
 <style >
 #array-rendering {
   list-style-type: none;
+  height: 30vh;
+  overflow-y: auto;
+  overflow-x: visible;
 }
 .tab-button {
   padding: 6px 10px;
