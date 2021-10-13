@@ -1,9 +1,9 @@
 <template>
   <span>Your rooms:</span><br /><br /><button @click="createNewRoom">
-    New room
-  </button>
-  <ul id="array-rendering">
-    <li v-for="notification in notifications" :key="notification.room">
+    New room</button
+  ><br /><br />
+  <div id="array-rendering">
+    <span v-for="notification in notifications" :key="notification.room">
       <div v-if="notification.read" class="read-notification">
         <ChatNotification :notification="notification" :socketRef="socketRef" />
       </div>
@@ -11,8 +11,8 @@
         <ChatNotification :notification="notification" :socketRef="socketRef" />
       </div>
       <br />
-    </li>
-  </ul>
+    </span>
+  </div>
 </template>
 <script>
 import ChatNotification from "./ChatNotification.vue";
@@ -43,7 +43,6 @@ export default {
   background-color: #5dbeff;
 }
 #array-rendering {
-  list-style-type: none;
   height: 30vh;
   overflow-y: auto;
   overflow-x: visible;

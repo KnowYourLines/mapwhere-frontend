@@ -1,13 +1,14 @@
 <template>
   <div class="column">
     <div v-if="missingLocations">
-      <ul id="array-rendering">
-        <span>Missing user locations for:</span>
-        <li v-for="user in usersMissingLocations" :key="user.username">
+      <br />
+      <span>Missing user locations for:<br /><br /></span>
+      <div id="array-rendering">
+        <span v-for="user in usersMissingLocations" :key="user.username">
           {{ user.display_name }}
           <br />
-        </li>
-      </ul>
+        </span>
+      </div>
     </div>
     <div v-if="!missingArea">
       <br />
@@ -92,7 +93,7 @@
         </div>
       </div>
     </div>
-    <div v-else ref="noArea">No area found. Try to travel further.</div>
+    <div v-else ref="noArea"><br />No area found. Try to travel further.</div>
   </div>
 </template>
 
@@ -535,6 +536,11 @@ export default {
 </script>
 
 <style scoped >
+#array-rendering {
+  height: 10vh;
+  overflow-y: auto;
+  overflow-x: visible;
+}
 #map {
   height: 80vh;
 }

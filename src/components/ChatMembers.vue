@@ -1,14 +1,14 @@
 <template>
-  Room members:
-  <ul id="members">
-    <li v-for="member in roomMembers" :key="member.display_name">
-      {{ member.display_name }}
-    </li>
-  </ul>
+  Room members:<br /><br />
+  <div id="members">
+    <span v-for="member in roomMembers" :key="member.display_name">
+      {{ member.display_name }}<br />
+    </span>
+  </div>
   <div v-if="privateRoom">
-    <span>Users requesting to join:</span>
-    <ul id="requests">
-      <li v-for="request in joinRequests" :key="request.user">
+    <span><br />Users requesting to join:<br /><br /></span>
+    <div id="requests">
+      <span v-for="request in joinRequests" :key="request.user">
         {{ request.user__display_name }}
         <div class="btn-group">
           <button
@@ -26,8 +26,9 @@
             Reject
           </button>
         </div>
-      </li>
-    </ul>
+        <br />
+      </span>
+    </div>
   </div>
 </template>
 <script>
@@ -67,13 +68,11 @@ export default {
 </script>
 <style >
 #members {
-  list-style-type: none;
   height: 15vh;
   overflow-y: auto;
   overflow-x: visible;
 }
 #requests {
-  list-style-type: none;
   height: 15vh;
   overflow-y: auto;
   overflow-x: visible;

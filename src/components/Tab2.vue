@@ -22,21 +22,21 @@
     <br /><br />
 
     <div v-if="possiblePlaces">
-      <ul id="array-rendering">
-        Did you mean:
-        <br /><br />
-        <li>
-          <button type="button" class="btn" @click="allLocationsWrong">
-            None of these</button
-          ><br /><br />
-        </li>
-        <li v-for="place in possiblePlaces" :key="place.place_id">
+      Did you mean:
+      <br /><br />
+      <span>
+        <button type="button" class="btn" @click="allLocationsWrong">
+          None of these</button
+        ><br /><br />
+      </span>
+      <div id="array-rendering">
+        <span v-for="place in possiblePlaces" :key="place.place_id">
           <button type="button" class="btn" @click="selectLocation(place)">
             {{ place.name }}<br />
             {{ place.formatted_address }}</button
           ><br /><br />
-        </li>
-      </ul>
+        </span>
+      </div>
     </div>
     <div v-else>
       <img
@@ -308,7 +308,6 @@ export default {
 
 <style >
 #array-rendering {
-  list-style-type: none;
   height: 30vh;
   overflow-y: auto;
   overflow-x: visible;

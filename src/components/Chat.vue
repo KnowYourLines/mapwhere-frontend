@@ -7,10 +7,11 @@
         :privateRoom="privateRoom"
         :joinRequests="joinRequests"
         :socketRef="socketRef"
-      />
+      /><br />
     </div>
 
     <div class="column-center">
+      <br />
       Room name:
       <input
         type="text"
