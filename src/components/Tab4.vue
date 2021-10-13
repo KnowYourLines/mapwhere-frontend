@@ -53,17 +53,15 @@
                 </button>
                 <span v-else>
                   <button @click="closeOpeningHours(index)">
-                    Close opening hours
-                  </button>
-                  <ul id="array-rendering">
-                    <li
-                      v-for="hours in place.opening_hours.weekday_text"
-                      :key="hours"
-                    >
-                      {{ hours }}
-                    </li>
-                  </ul></span
-                >
+                    Close opening hours</button
+                  ><br /><br />
+                  <span
+                    v-for="hours in place.opening_hours.weekday_text"
+                    :key="hours"
+                  >
+                    {{ hours }}<br /><br />
+                  </span>
+                </span>
               </span>
             </td>
           </tr>
@@ -112,14 +110,6 @@ export default {
   display: table;
   width: 100%;
 }
-
-#array-rendering {
-  list-style-type: none;
-  height: 30vh;
-  overflow-y: auto;
-  overflow-x: visible;
-}
-
 .places:nth-child(odd) {
   background-color: rgb(227, 246, 255);
 }
