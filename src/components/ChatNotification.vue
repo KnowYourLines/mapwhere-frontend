@@ -7,6 +7,8 @@
     {{ notification.message__content }}</span
   ><span v-if="notification.added_place__display_name">
     {{ notification.added_place__display_name }} saved a place</span
+  ><span v-if="notification.voted_place__display_name">
+    {{ notification.voted_place__display_name }} voted</span
   >
   <span v-if="notification.user_joined__display_name">
     {{ notification.user_joined__display_name }} joined the room</span
