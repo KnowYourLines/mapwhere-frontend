@@ -5,6 +5,9 @@
         <tbody>
           <tr class="places" v-for="(place, index) in places" :key="index">
             <td>
+              <button @click="vote(place)">Vote</button>
+            </td>
+            <td>
               <img :src="place.icon" /><br /><a
                 :href="place.url"
                 target="_blank"
@@ -96,6 +99,14 @@ export default {
     },
     closeOpeningHours: function (index) {
       this.viewOpenHours[index] = false;
+    },
+    vote: function (place) {
+      this.socketRef.send(
+        JSON.stringify({
+          command: "vote_place",
+          place_id: place.place_id,
+        })
+      );
     },
   },
 };
