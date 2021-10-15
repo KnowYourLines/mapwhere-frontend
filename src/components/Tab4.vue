@@ -16,7 +16,9 @@
               ><br />{{ place.vicinity
               }}<span v-if="place.formatted_phone_number">
                 <br />{{ place.formatted_phone_number }} </span
-              ><br /><br />{{ place.travel_time.text }} away
+              ><span v-if="place.travel_time"
+                ><br /><br />{{ place.travel_time.text }} away</span
+              >
             </td>
             <td>
               <span v-if="place.website">
