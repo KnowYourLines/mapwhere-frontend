@@ -5,7 +5,14 @@
         <tbody>
           <tr class="places" v-for="(place, index) in places" :key="index">
             <td>
-              <button @click="vote(place)">Vote</button>
+              <span
+                >Votes: {{ place.total_votes }}<br /><br /><button
+                  v-if="!place.user_voted_for"
+                  @click="vote(place)"
+                >
+                  Vote</button
+                ><button v-else disabled>Voted</button></span
+              >
             </td>
             <td>
               <img :src="place.icon" /><br /><a
