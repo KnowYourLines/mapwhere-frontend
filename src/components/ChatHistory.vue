@@ -4,7 +4,11 @@
   ><br /><br />
   <div id="array-rendering">
     <span v-for="notification in notifications" :key="notification.room">
-      <div v-if="notification.read" class="read-notification">
+      <div
+        v-if="notification.read"
+        class="read-notification"
+        v-bind:class="{ room: notification.current_room }"
+      >
         <ChatNotification :notification="notification" :socketRef="socketRef" />
       </div>
       <div v-else class="unread-notification">
@@ -40,7 +44,10 @@ export default {
 </script>
 <style scoped>
 .unread-notification {
-  background-color: #5dbeff;
+  background-color: rgb(255, 187, 187);
+}
+.room {
+  background-color: rgb(187, 233, 255);
 }
 #array-rendering {
   height: 30vh;
