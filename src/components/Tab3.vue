@@ -346,6 +346,7 @@ export default {
         this.map.data.addGeoJson(geoJson);
       }
       this.markers = [];
+      this.selectedResultIndex = null;
       this.placeResults = this.areaQueryResults;
       if (this.placeResults.length == 0) {
         alert("No places found!");
