@@ -150,6 +150,7 @@ export default {
           this.markers[i] = new window.google.maps.Marker({
             position: this.placeResults[i].geometry.location,
             animation: window.google.maps.Animation.DROP,
+            optimized: false
           });
           // If the user clicks a marker, show the details in an info window.
           this.markers[i].placeResult = this.placeResults[i];
@@ -356,6 +357,7 @@ export default {
           this.markers[i] = new window.google.maps.Marker({
             position: this.placeResults[i].geometry.location,
             animation: window.google.maps.Animation.DROP,
+            optimized: false
           });
           // If the user clicks a marker, show the details in an info window.
           this.markers[i].placeResult = this.placeResults[i];
