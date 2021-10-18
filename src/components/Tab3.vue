@@ -155,7 +155,7 @@ export default {
           this.markers[i].placeResult = this.placeResults[i];
           window.google.maps.event.addListener(
             this.markers[i],
-            "click",
+            "mousedown",
             function () {
               const marker = this.markers[i];
               let place = this.placeResults[i];
@@ -361,7 +361,7 @@ export default {
           this.markers[i].placeResult = this.placeResults[i];
           window.google.maps.event.addListener(
             this.markers[i],
-            "click",
+            "mousedown",
             function () {
               const marker = this.markers[i];
               let place = this.placeResults[i];
@@ -466,7 +466,7 @@ export default {
     },
     selectedResult: function (index) {
       this.selectedResultIndex = index;
-      window.google.maps.event.trigger(this.markers[index], "click");
+      window.google.maps.event.trigger(this.markers[index], "mousedown");
     },
     submitAreaQuery: function () {
       const turf = window.turf;
