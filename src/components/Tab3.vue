@@ -83,7 +83,7 @@
                 @click="selectedResult(index)"
                 v-for="(result, index) in placeResults"
                 :key="index"
-                v-bind:class="{ active: selectedResultIndex === index }"
+                v-bind:class="{ active: selectedResultIndex == index }"
               >
                 <td><img :src="result.icon" /></td>
                 <td>{{ result.name }}</td>
