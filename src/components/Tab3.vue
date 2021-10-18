@@ -465,7 +465,6 @@ export default {
       );
     },
     selectedResult: function (index) {
-      this.selectedResultIndex = null;
       this.selectedResultIndex = index;
       window.google.maps.event.trigger(this.markers[index], "click");
     },
