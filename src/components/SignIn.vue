@@ -336,6 +336,8 @@ export default {
               );
             } else if ("refresh_places" in data) {
               this.socketRef.send(JSON.stringify({ command: "fetch_places" }));
+            } else if ("region_not_found" in data) {
+              alert("Location must be more specific!");
             } else if ("places" in data) {
               this.$emit("new-places", data.places);
             } else if ("area_query_results" in data) {
