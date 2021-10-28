@@ -85,13 +85,6 @@ export default {
     },
   },
   mounted() {
-    // if (window.location.protocol !== "https:") {
-    //   window.location.replace(
-    //     `https:${window.location.href.substring(
-    //       window.location.protocol.length
-    //     )}`
-    //   );
-    // }
     this.shareable = typeof navigator.share === "function";
     const urlParams = new URLSearchParams(window.location.search);
     let room = urlParams.get("room");
