@@ -2,7 +2,7 @@
   <div>
     <div class="column">
       <div v-if="showSignIn">
-        <section id="firebaseui-auth-container"></section>
+        <section ref="firebaseui"></section>
         <div v-if="shareable">
           <button @click="share">Share</button>
         </div>
@@ -125,7 +125,7 @@ export default {
           this.showSignIn = this.user.isAnonymous;
           if (this.showSignIn) {
             this.$nextTick(() => {
-              this.ui.start("#firebaseui-auth-container", this.uiConfig);
+              this.ui.start(this.$refs.firebaseui, this.uiConfig);
             });
           }
           const backendUrl = new URL(process.env.VUE_APP_BACKEND_URL);
