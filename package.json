@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@vueform/toggle": "^2.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "core-js": "^3.14.0",
     "firebase": "^8.6.6",
     "firebaseui": "^4.8.0",
