@@ -1,5 +1,6 @@
 # build stage
 FROM node:lts-alpine as build-stage
+ENV VUE_APP_BACKEND_URL https://mapwhere-backend.herokuapp.com
 ENV VUE_APP_MAPS_API_KEY AIzaSyCGFVWnH0vevBPG52s3iYsCRJoEMBpryjk
 ENV VUE_APP_FIREBASE_API_KEY AIzaSyC0oQAyJN_42wFRvpVxpsu1MbH3-f-y5cY
 ENV VUE_APP_FIREBASE_AUTH_DOMAIN mapwhere-be05d.firebaseapp.com
