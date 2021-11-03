@@ -470,9 +470,6 @@ export default {
     },
     submitAreaQuery: function () {
       const turf = window.turf;
-      let bbox;
-      let center = turf.point([this.area.centroid_lng, this.area.centroid_lat]);
-      let searchRadius;
 
       if (this.area.type == "Polygon") {
         this.intersection = turf.polygon(this.area.coordinates);
@@ -480,16 +477,10 @@ export default {
       if (this.area.type == "MultiPolygon") {
         this.intersection = turf.multiPolygon(this.area.coordinates);
       }
-      bbox = turf.bbox(this.intersection);
-      searchRadius = Math.max(
-        turf.distance(center, turf.point([bbox[0], bbox[1]])) * 1000,
-        turf.distance(center, turf.point([bbox[2], bbox[3]])) * 1000
-      );
       this.socketRef.send(
         JSON.stringify({
           command: "update_area_query",
           query: this.query,
-          radius: searchRadius,
           lat: this.area.centroid_lat,
           lng: this.area.centroid_lng,
         })
